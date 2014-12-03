@@ -1,15 +1,14 @@
 {
-	"manifest_version": 2,
-
-	"name": "Laracasts Notifier",
-	"description": "This extension notifies you of new lessons, series and lets you view the latest.",
-	"version": "0.1.0",
-
-	"permissions": [
-	"https://laracasts.com/feed"
-	],
-	"browser_action": {
-		"default_icon": "laracasts.png",
-		"default_popup": "popup.html"
-	}
+  "manifest_version": 2,
+  "name": "Laracasts Notifier",
+  "description": "This extension notifies you of new lessons, series and lets you view the latest.",
+  "version": "0.1.0",
+  "permissions": [
+    "https://laracasts.com/feed",
+    "notifications"
+  ],
+  "browser_action": {
+    "default_icon": "laracasts.png",
+    "default_popup": "popup.html"
+  }
 }
