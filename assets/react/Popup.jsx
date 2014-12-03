@@ -14,16 +14,16 @@ var Notifier = React.createClass({
         return {data: []};
     },
     componentDidMount: function () {
-        //this.fetchFeedFromLaracasts();
-        //setInterval(this.fetchFeedFromLaracasts, this.props.pollInterval);
-        this.setState({data: this.props.data});
+        this.fetchFeedFromLaracasts();
+        setInterval(this.fetchFeedFromLaracasts, this.props.pollInterval);
+        //this.setState({data: this.props.data});
     },
     fetchFeedFromLaracasts: function () {
         $.ajax({
             url: this.props.url,
             dataType: 'json',
             success: function (data) {
-                this.setState({data: data.data});
+                this.setState({data: data});
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
@@ -34,7 +34,7 @@ var Notifier = React.createClass({
 
     	var optionNodes = this.state.data.map(function (item) {
             return (
-                <NotifierItem heading={item.heading} text={item.text} href={item.link} />
+                <NotifierItem heading={item.title} text={item.summary} href={item.link} />
             );
         });
         return (
@@ -73,7 +73,19 @@ var data = [
   }
 ];
 
+// React.render(
+// 	<Notifier url="https://laracasts.com/feed" data={data} pollInterval={10000} />,
+// 	document.getElementById('notifier')
+// );
+
+// Local development
 React.render(
-	<Notifier url="https://laracasts.com/feed" data={data} pollInterval={10000} />,
+	<Notifier url="http://laracasts-feed.mariobasic.app/api/v1/feed" data={data} pollInterval={3600000} />,
 	document.getElementById('notifier')
 );
+
+// Production development
+// React.render(
+// 	<Notifier url="http://laracasts-feed.mariobasic.com/api/v1/feed" data={data} pollInterval={10000} />,
+// 	document.getElementById('notifier')
+// );
