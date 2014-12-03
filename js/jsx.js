@@ -1,10 +1,19 @@
 var NotifierItem = React.createClass({displayName: 'NotifierItem',
     render: function () {
         return (
-        	React.createElement("a", {target: "_blank", href: this.props.href, className: "list-group-item"}, 
-		    	React.createElement("h4", {className: "list-group-item-heading"}, this.props.heading), 
-		    	React.createElement("p", {className: "list-group-item-text"}, this.props.text)
-		  	)
+            React.createElement("div", {className: "row"}, 
+                React.createElement("div", {className: "col-md-12"}, 
+                    React.createElement("div", {className: "panel panel-default"}, 
+                        React.createElement("div", {className: "panel-heading"}, 
+                            React.createElement("h3", {className: "panel-title"}, React.createElement("a", {target: "_blank", href: this.props.href}, this.props.heading))
+                        ), 
+                        React.createElement("div", {className: "panel-body"}, 
+                            this.props.text
+                        ), 
+                        React.createElement("div", {className: "panel-footer"}, React.createElement("span", {className: "label label-primary"}, this.props.type))
+                    )
+                )
+            )
         );
     }
 });
@@ -32,15 +41,16 @@ var Notifier = React.createClass({displayName: 'Notifier',
     },
     render: function () {
 
-    	var optionNodes = this.state.data.map(function (item) {
+    	var notifierNodes = this.state.data.map(function (item) {
             return (
-                React.createElement(NotifierItem, {heading: item.title, text: item.summary, href: item.link})
+                React.createElement(NotifierItem, {type: item.type, heading: item.title, text: item.summary, href: item.link})
             );
         });
         return (
-        	React.createElement("div", {className: "list-group"}, 
-			  	optionNodes
-			)
+            React.createElement("div", null, 
+                notifierNodes
+            )
+
         );
     }
 });

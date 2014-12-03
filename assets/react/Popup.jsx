@@ -1,10 +1,19 @@
 var NotifierItem = React.createClass({
     render: function () {
         return (
-        	<a target="_blank" href={this.props.href} className="list-group-item">
-		    	<h4 className="list-group-item-heading">{this.props.heading}</h4>
-		    	<p className="list-group-item-text">{this.props.text}</p>
-		  	</a>
+            <div className="row">
+                <div className="col-md-12">
+                    <div className="panel panel-default">
+                        <div className="panel-heading">
+                            <h3 className="panel-title"><a target="_blank" href={this.props.href}>{this.props.heading}</a></h3>
+                        </div>
+                        <div className="panel-body">
+                            {this.props.text}
+                        </div>
+                        <div className="panel-footer"><span className="label label-primary">{this.props.type}</span></div>
+                    </div>
+                </div>
+            </div>
         );
     }
 });
@@ -32,15 +41,16 @@ var Notifier = React.createClass({
     },
     render: function () {
 
-    	var optionNodes = this.state.data.map(function (item) {
+    	var notifierNodes = this.state.data.map(function (item) {
             return (
-                <NotifierItem heading={item.title} text={item.summary} href={item.link} />
+                <NotifierItem type={item.type} heading={item.title} text={item.summary} href={item.link} />
             );
         });
         return (
-        	<div className="list-group">
-			  	{optionNodes}
-			</div>
+            <div>
+                {notifierNodes}
+            </div>
+
         );
     }
 });
