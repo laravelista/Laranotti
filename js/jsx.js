@@ -1,15 +1,15 @@
 var NotifierItem = React.createClass({displayName: 'NotifierItem',
     render: function () {
         return (
-            React.createElement("div", {className: "row"}, 
-                React.createElement("div", {className: "col-md-12"}, 
-                    React.createElement("div", {className: "panel panel-default"}, 
-                        React.createElement("div", {className: "panel-heading"}, 
+            React.createElement("div", {className: "row"},
+                React.createElement("div", {className: "col-md-12"},
+                    React.createElement("div", {className: "panel panel-default"},
+                        React.createElement("div", {className: "panel-heading"},
                             React.createElement("h3", {className: "panel-title"}, React.createElement("a", {target: "_blank", href: this.props.href}, this.props.heading))
-                        ), 
-                        React.createElement("div", {className: "panel-body"}, 
+                        ),
+                        React.createElement("div", {className: "panel-body"},
                             this.props.text
-                        ), 
+                        ),
                         React.createElement("div", {className: "panel-footer"}, React.createElement("span", {className: "label label-primary"}, this.props.type))
                     )
                 )
@@ -24,8 +24,40 @@ var Notifier = React.createClass({displayName: 'Notifier',
     },
     componentDidMount: function () {
         this.fetchFeedFromLaracasts();
-        setInterval(this.fetchFeedFromLaracasts, this.props.pollInterval);
+        setInterval(this.refreshFeedFromLaracasts, this.props.pollInterval);
         //this.setState({data: this.props.data});
+    },
+    refreshFeedFromLaracasts: function() {
+        $.ajax({
+            url: this.props.url,
+            dataType: 'json',
+            success: function (data) {
+                /*console.log(JSON.stringify(this.state.data));
+                console.log(JSON.stringify(data));*/
+                //var diff = array_diff(json_encode(this.state.data), json_encode(data));
+                //var diff = compareJSON(JSON.stringify(this.state.data), JSON.stringify(data));
+
+                /*console.log(this.state.data);
+                console.log(data);*/
+
+                //var counter = count(diff);
+
+                //console.log(diff);
+
+                //console.log(counter);
+                /*compare(this.state.data, data)*/
+
+                /*if(count(this.state.data) != count(data))
+                {
+                    console.log('something!');
+                    console.log(data[0].title);
+                }*/
+                //this.setState({data: data});
+            }.bind(this),
+            error: function (xhr, status, err) {
+                console.error(this.props.url, status, err.toString());
+            }.bind(this)
+        });
     },
     fetchFeedFromLaracasts: function () {
         $.ajax({
@@ -47,7 +79,7 @@ var Notifier = React.createClass({displayName: 'Notifier',
             );
         });
         return (
-            React.createElement("div", null, 
+            React.createElement("div", null,
                 notifierNodes
             )
 
@@ -90,7 +122,7 @@ var data = [
 
 // Local development
 React.render(
-	React.createElement(Notifier, {url: "http://laracasts-feed.mariobasic.app/api/v1/feed", data: data, pollInterval: 3600000}),
+	React.createElement(Notifier, {url: "http://laracasts-feed.mariobasic.app/api/v1/feed", data: data, pollInterval: 2000}),
 	document.getElementById('notifier')
 );
 
