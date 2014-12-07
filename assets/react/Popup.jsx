@@ -10,7 +10,6 @@ var NotifierItem = React.createClass({
                         <div className="panel-body">
                             {this.props.text}
                         </div>
-                        <div className="panel-footer"><span className="label label-primary">{this.props.type}</span></div>
                     </div>
                 </div>
             </div>
@@ -24,40 +23,8 @@ var Notifier = React.createClass({
     },
     componentDidMount: function () {
         this.fetchFeedFromLaracasts();
-        setInterval(this.refreshFeedFromLaracasts, this.props.pollInterval);
+        //setInterval(this.fetchFeedFromLaracasts, this.props.pollInterval);
         //this.setState({data: this.props.data});
-    },
-    refreshFeedFromLaracasts: function() {
-        $.ajax({
-            url: this.props.url,
-            dataType: 'json',
-            success: function (data) {
-                /*console.log(JSON.stringify(this.state.data));
-                console.log(JSON.stringify(data));*/
-                //var diff = array_diff(json_encode(this.state.data), json_encode(data));
-                //var diff = compareJSON(JSON.stringify(this.state.data), JSON.stringify(data));
-
-                console.log(this.state.data);
-                console.log(data);
-
-                //var counter = count(diff);
-
-                //console.log(diff);
-
-                //console.log(counter);
-                /*compare(this.state.data, data)*/
-
-                if(count(this.state.data) != count(data))
-                {
-                    console.log('something!');
-                    console.log(data[0].title);
-                }
-                //this.setState({data: data});
-            }.bind(this),
-            error: function (xhr, status, err) {
-                console.error(this.props.url, status, err.toString());
-            }.bind(this)
-        });
     },
     fetchFeedFromLaracasts: function () {
         $.ajax({
@@ -123,7 +90,7 @@ var data = [
 
 // Local development
 React.render(
-	<Notifier url="http://laracasts-feed.mariobasic.app/api/v1/feed" data={data} pollInterval={2000} />,
+	<Notifier url="http://laracasts-feed.mariobasic.app/api/v1/feed/lessons" data={data} pollInterval={2000} />,
 	document.getElementById('notifier')
 );
 
