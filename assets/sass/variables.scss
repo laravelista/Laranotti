@@ -1,3 +1,20 @@
 $font-family-sans-serif: "Lato", Helvetica, Arial, sans-serif;
 
 $primary: #F55430;
+
+//== Navbar
+//
+//##
+
+$navbar-default-bg: #ed1c24;
+/*$navbar-margin-bottom: 0px;*/
+$navbar-border-radius: 0px;
+$navbar-default-link-color: #fff;
+
+//** Background color for `<body>`.
+$body-bg: #333;
+//** Global text color on `<body>`.
+$text-color: #fff;
+
+$brand-primary: darken(#f15d42, 6.5%) !default;
+

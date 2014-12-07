@@ -1,8 +1,8 @@
-/*chrome.notifications.create('example-notification', {
+chrome.notifications.create('example-notification', {
     type: "basic",
     title: "Case Study: The Laravel Installer",
     message: "To continue our learning, let's review the makeup of Laravel's command-line installer tool. In fact, we'll reproduce it from scratch!",
-    iconUrl: "laracasts-logo.png",
+    iconUrl: "laracasts-logo.jpg",
     buttons: [
         {
             title: 'Watch'
@@ -25,4 +25,7 @@ chrome.notifications.onButtonClicked.addListener(function(notificationId, button
     {
         alert('Mark lesson as watched')
     }
-});*/
+});
+
+/*
+chrome.browserAction.setBadgeText({text: "10+"});*/

@@ -1,11 +1,21 @@
+/*
+ |--------------------------------------------------------------------------
+ | Elixir Asset Management
+ |--------------------------------------------------------------------------
+ |
+ | Elixir provides a clean, fluent API for defining some basic Gulp tasks
+ | for your Laravel application. By default, we are compiling the Sass
+ | file for our application, as well as publishing vendor resources.
+ |
+ */
+
 var gulp = require('gulp');
 var gutil = require('gulp-util');
 var concat = require('gulp-concat');
 var react = require('gulp-react');
-
 var elixir = require('laravel-elixir');
 
-elixir.extend("react", function() {
+elixir.extend("react", function () {
 
     gulp.task('react', function () {
         return gulp.src('assets/react/**/*.jsx')
@@ -21,18 +31,7 @@ elixir.extend("react", function() {
 
 });
 
-/*
- |--------------------------------------------------------------------------
- | Elixir Asset Management
- |--------------------------------------------------------------------------
- |
- | Elixir provides a clean, fluent API for defining some basic Gulp tasks
- | for your Laravel application. By default, we are compiling the Sass
- | file for our application, as well as publishing vendor resources.
- |
- */
-
-elixir(function(mix) {
+elixir(function (mix) {
     mix.sass('app.scss')
         .publish(
         'jquery/dist/jquery.min.js',
@@ -54,5 +53,5 @@ elixir(function(mix) {
         'react/react.min.js',
         'public/js/vendor/react.js'
     )
-    .react();
+        .react();
 });

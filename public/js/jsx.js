@@ -1,17 +1,11 @@
 var NotifierItem = React.createClass({displayName: 'NotifierItem',
     render: function () {
         return (
-            React.createElement("div", {className: "row"}, 
-                React.createElement("div", {className: "col-md-12"}, 
-                    React.createElement("div", {className: "panel panel-default"}, 
-                        React.createElement("div", {className: "panel-heading"}, 
-                            React.createElement("h3", {className: "panel-title"}, React.createElement("a", {target: "_blank", href: this.props.href}, this.props.heading))
-                        ), 
-                        React.createElement("div", {className: "panel-body"}, 
-                            this.props.text
-                        )
-                    )
-                )
+            React.createElement("div", null, 
+                React.createElement("p", null, React.createElement("small", null, React.createElement("b", null, React.createElement("i", {className: "fa fa-clock-o"}), " ", this.props.date))), 
+                React.createElement("h4", null, React.createElement("a", {target: "_blank", href: this.props.href}, this.props.heading)), 
+                React.createElement("p", null, this.props.text), 
+                React.createElement("br", null)
             )
         );
     }
@@ -32,6 +26,8 @@ var Notifier = React.createClass({displayName: 'Notifier',
             dataType: 'json',
             success: function (data) {
                 this.setState({data: data});
+                /*console.log(data.length.toString());*/
+                chrome.browserAction.setBadgeText({text: data.length.toString()});
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
@@ -42,7 +38,7 @@ var Notifier = React.createClass({displayName: 'Notifier',
 
     	var notifierNodes = this.state.data.map(function (item) {
             return (
-                React.createElement(NotifierItem, {type: item.type, heading: item.title, text: item.summary, href: item.link})
+                React.createElement(NotifierItem, {date: item.date, heading: item.title, text: item.summary, href: item.link})
             );
         });
         return (

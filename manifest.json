@@ -4,7 +4,7 @@
   "description": "This extension notifies you of new lessons, series and lets you view the latest.",
   "version": "0.1.0",
   "permissions": [
-    "https://laracasts.com/feed",
+    "http://laracasts-feed.mariobasic.app/api/v1/feed/lessons",
     "notifications"
   ],
   "browser_action": {

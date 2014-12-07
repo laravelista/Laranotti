@@ -1,17 +1,11 @@
 var NotifierItem = React.createClass({
     render: function () {
         return (
-            <div className="row">
-                <div className="col-md-12">
-                    <div className="panel panel-default">
-                        <div className="panel-heading">
-                            <h3 className="panel-title"><a target="_blank" href={this.props.href}>{this.props.heading}</a></h3>
-                        </div>
-                        <div className="panel-body">
-                            {this.props.text}
-                        </div>
-                    </div>
-                </div>
+            <div>
+                <p><small><b><i className="fa fa-clock-o"></i> {this.props.date}</b></small></p>
+                <h4><a target="_blank" href={this.props.href}>{this.props.heading}</a></h4>
+                <p>{this.props.text}</p>
+                <br />
             </div>
         );
     }
@@ -32,6 +26,8 @@ var Notifier = React.createClass({
             dataType: 'json',
             success: function (data) {
                 this.setState({data: data});
+                /*console.log(data.length.toString());*/
+                chrome.browserAction.setBadgeText({text: data.length.toString()});
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
@@ -42,7 +38,7 @@ var Notifier = React.createClass({
 
     	var notifierNodes = this.state.data.map(function (item) {
             return (
-                <NotifierItem type={item.type} heading={item.title} text={item.summary} href={item.link} />
+                <NotifierItem date={item.date} heading={item.title} text={item.summary} href={item.link} />
             );
         });
         return (
