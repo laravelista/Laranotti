@@ -21,19 +21,8 @@
     "tests"
   ],
   "dependencies": {
-    "bootstrap": "~3.3.1",
     "react": "~0.12.1",
-    "phpjs": "*"
-  },
-  "install": {
-    "path": "libs",
-    "sources": {
-      "phpjs": [
-        "bower_components/phpjs/functions/array/array_diff.js",
-        "bower_components/phpjs/functions/array/count.js",
-        "bower_components/phpjs/functions/json/json_encode.js",
-        "bower_components/phpjs/functions/json/json_decode.js"
-      ]
-    }
+    "bootstrap-sass-official": "~3.3.1",
+    "font-awesome": "~4.2.0"
   }
 }
