@@ -1,3 +1,4 @@
+/*
 var NotifierItem = React.createClass({
     render: function () {
         return (
@@ -26,7 +27,9 @@ var Notifier = React.createClass({
             dataType: 'json',
             success: function (data) {
                 this.setState({data: data});
-                /*console.log(data.length.toString());*/
+                */
+/*console.log(data.length.toString());*//*
+
                 chrome.browserAction.setBadgeText({text: data.length.toString()});
             }.bind(this),
             error: function (xhr, status, err) {
@@ -93,4 +96,4 @@ React.render(
 // React.render(
 // 	<Notifier url="http://laracasts-feed.mariobasic.com/api/v1/feed" data={data} pollInterval={10000} />,
 // 	document.getElementById('notifier')
-// );
+// );*/
