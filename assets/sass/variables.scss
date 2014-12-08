@@ -7,14 +7,21 @@ $primary: #F55430;
 //##
 
 $navbar-default-bg: #ed1c24;
-/*$navbar-margin-bottom: 0px;*/
+$navbar-margin-bottom: 0px;
 $navbar-border-radius: 0px;
+
+// Navbar links
 $navbar-default-link-color: #fff;
+$navbar-default-link-hover-color: #000;
+
+// Navbar brand
+$brand-primary: darken(#f15d42, 6.5%) !default;
+
+// Navbar toggle
+$navbar-default-toggle-hover-bg:           #d71119;
+$navbar-default-toggle-border-color:       #ed1c24;
 
 //** Background color for `<body>`.
 $body-bg: #333;
 //** Global text color on `<body>`.
 $text-color: #fff;
-
-$brand-primary: darken(#f15d42, 6.5%) !default;
-

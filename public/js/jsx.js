@@ -1,9 +1,9 @@
 var NotifierItem = React.createClass({displayName: 'NotifierItem',
     render: function () {
         return (
-            React.createElement("div", null, 
-                React.createElement("p", null, React.createElement("small", null, React.createElement("b", null, React.createElement("i", {className: "fa fa-clock-o"}), " ", this.props.date))), 
-                React.createElement("h4", null, React.createElement("a", {target: "_blank", href: this.props.href}, this.props.heading)), 
+            React.createElement("div", {className: "laracasts-lesson"}, 
+                React.createElement("p", null, React.createElement("small", null, React.createElement("b", null, React.createElement("i", {className: "fa fa-fw fa-clock-o"}), " ", this.props.date))), 
+                React.createElement("h4", null, React.createElement("i", {className: "fa fa-fw fa-square-o"}), " ", React.createElement("a", {target: "_blank", href: this.props.href}, this.props.heading)), 
                 React.createElement("p", null, this.props.text), 
                 React.createElement("br", null)
             )

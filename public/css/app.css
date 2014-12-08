@@ -1,4 +1,3 @@
-/*$navbar-margin-bottom: 0px;*/
 /*! normalize.css v3.0.2 | MIT License | git.io/normalize */
 html {
   font-family: sans-serif;
@@ -2989,7 +2988,7 @@ tbody.collapse.in {
 .navbar {
   position: relative;
   min-height: 50px;
-  margin-bottom: 20px;
+  margin-bottom: 0px;
   border: 1px solid transparent; }
   .navbar:before, .navbar:after {
     content: " ";
@@ -3270,7 +3269,7 @@ tbody.collapse.in {
   .navbar-default .navbar-nav > li > a {
     color: #fff; }
     .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
-      color: #333;
+      color: #000;
       background-color: transparent; }
   .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active > a:hover, .navbar-default .navbar-nav > .active > a:focus {
     color: #555;
@@ -3279,9 +3278,9 @@ tbody.collapse.in {
     color: #ccc;
     background-color: transparent; }
   .navbar-default .navbar-toggle {
-    border-color: #ddd; }
+    border-color: #ed1c24; }
     .navbar-default .navbar-toggle:hover, .navbar-default .navbar-toggle:focus {
-      background-color: #ddd; }
+      background-color: #d71119; }
     .navbar-default .navbar-toggle .icon-bar {
       background-color: #888; }
   .navbar-default .navbar-collapse, .navbar-default .navbar-form {
@@ -3293,7 +3292,7 @@ tbody.collapse.in {
     .navbar-default .navbar-nav .open .dropdown-menu > li > a {
       color: #fff; }
       .navbar-default .navbar-nav .open .dropdown-menu > li > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus {
-        color: #333;
+        color: #000;
         background-color: transparent; }
     .navbar-default .navbar-nav .open .dropdown-menu > .active > a, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:hover, .navbar-default .navbar-nav .open .dropdown-menu > .active > a:focus {
       color: #555;
@@ -3305,11 +3304,11 @@ tbody.collapse.in {
   .navbar-default .navbar-link {
     color: #fff; }
     .navbar-default .navbar-link:hover {
-      color: #333; }
+      color: #000; }
   .navbar-default .btn-link {
     color: #fff; }
     .navbar-default .btn-link:hover, .navbar-default .btn-link:focus {
-      color: #333; }
+      color: #000; }
     .navbar-default .btn-link[disabled]:hover, .navbar-default .btn-link[disabled]:focus, fieldset[disabled] .navbar-default .btn-link:hover, fieldset[disabled] .navbar-default .btn-link:focus {
       color: #ccc; }
 
@@ -4855,6 +4854,18 @@ button.close {
   margin: -11px 10px -10px 0;
   padding: 0; }
 
+::-webkit-scrollbar {
+  height: 12px;
+  width: 12px;
+  background: #333; }
+
+::-webkit-scrollbar-thumb {
+  background: #f15d42;
+  -webkit-border-radius: 0; }
+
+::-webkit-scrollbar-corner {
+  background: #000; }
+
 #forgot-password-link {
   padding-top: 7px;
   vertical-align: middle; }
@@ -4913,14 +4924,16 @@ button.close {
   #welcome .steps > .steps__item p:last-child {
     margin-bottom: 0; }
 
-::-webkit-scrollbar {
-  height: 12px;
-  width: 12px;
-  background: #333; }
+.laracasts-lesson:hover {
+  background-color: #222222; }
 
-::-webkit-scrollbar-thumb {
-  background: #f15d42;
-  -webkit-border-radius: 0; }
+.laracasts-lesson {
+  margin-left: -15px;
+  margin-right: -15px;
+  padding: 15px; }
 
-::-webkit-scrollbar-corner {
-  background: #000; }
+.laracasts-lesson h4 i {
+  cursor: pointer; }
+
+body {
+  min-width: 357px; }

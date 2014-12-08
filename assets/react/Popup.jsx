@@ -1,9 +1,9 @@
 var NotifierItem = React.createClass({
     render: function () {
         return (
-            <div>
-                <p><small><b><i className="fa fa-clock-o"></i> {this.props.date}</b></small></p>
-                <h4><a target="_blank" href={this.props.href}>{this.props.heading}</a></h4>
+            <div className="laracasts-lesson">
+                <p><small><b><i className="fa fa-fw fa-clock-o"></i> {this.props.date}</b></small></p>
+                <h4><i className="fa fa-fw fa-square-o"></i> <a target="_blank" href={this.props.href}>{this.props.heading}</a></h4>
                 <p>{this.props.text}</p>
                 <br />
             </div>
