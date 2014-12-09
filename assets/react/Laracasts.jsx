@@ -2,7 +2,10 @@ var Lesson = React.createClass({
     render: function () {
         return (
             <div className="laracasts-lesson">
-                <p><small><b><i className="fa fa-fw fa-clock-o"></i> {this.props.date}</b></small></p>
+                <p>
+                    <small><b><i className="fa fa-fw fa-clock-o"></i> {this.props.date}</b></small>
+                    <button onClick={this.props.removeLesson} type="button" className="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span className="sr-only">Close</span></button>
+                </p>
                 <h4><i onClick={this.props.toggleWatched} className={this.props.watched ? 'fa fa-fw fa-check-square-o' : 'fa fa-fw fa-square-o'}></i> <a target="_blank" href={this.props.href}>{this.props.heading}</a></h4>
                 <p>{this.props.text}</p>
                 <br />
@@ -17,7 +20,7 @@ var Lessons = React.createClass({
         var that = this;
         var lessonNodes = this.props.lessons.map(function (lesson, key) {
             return (
-                <Lesson item={lesson} watched={lesson.watched} toggleWatched={that.props.toggleWatched.bind(this, key)} date={lesson.date} heading={lesson.title} text={lesson.summary} href={lesson.link} />
+                <Lesson item={lesson} removeLesson={that.props.removeLesson.bind(this, key)} watched={lesson.watched} toggleWatched={that.props.toggleWatched.bind(this, key)} date={lesson.date} heading={lesson.title} text={lesson.summary} href={lesson.link} />
             );
         });
         return (
@@ -39,12 +42,24 @@ var Navbar = React.createClass({
                             <span className="sr-only">Toggle navigation</span>
                             <i className="fa fa-fw fa-cogs"></i>
                         </button>
-                        <a target="_blank" className="navbar-brand" href="https://laracasts.com">Laracasts</a>
+                        <a target="_blank" className="navbar-brand" href="https://laracasts.com">Laracasts <i>Notifier</i></a>
                     </div>
                     <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul className="nav navbar-nav">
                             <li><a onClick={this.props.markAllWatched} href="#"><i className="fa fa-fw fa-eye"></i> Mark All Watched</a></li>
                             <li><a onClick={this.props.refreshFeed} href="#"><i className="fa fa-fw fa-refresh"></i> Refresh Feed</a></li>
+
+                            <li className="dropdown">
+                                <a href="#" className="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i className="fa fa-fw fa-info"></i> About <span className="caret"></span></a>
+                                <ul className="dropdown-menu" role="menu">
+                                    <li><a target="_blank" href="https://github.com/mabasic/laracasts-chrome-extension/issues"><i className="fa fa-fw fa-bug"></i> Report an Issue</a></li>
+                                    <li><a target="_blank" href="https://github.com/mabasic/laracasts-chrome-extension"><i className="fa fa-fw fa-github"></i> View on GitHub</a></li>
+
+                                    <li><a target="_blank" href="https://gratipay.com/mabasic/"><i className="fa fa-fw fa-usd"></i> Donate Developer</a></li>
+
+                                    <li><a target="_blank" href="http://mariobasic.com"><i className="fa fa-fw fa-heart-o"></i> Developer Blog</a></li>
+                                </ul>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -55,16 +70,6 @@ var Navbar = React.createClass({
 
 var Notifier = React.createClass({
     getInitialState: function () {
-
-        if(typeof chrome.storage === 'object') {
-            var that = this;
-
-            // This is loaded when it loads
-            chrome.storage.sync.get('lessons', function (result) {
-                that.setState({lessons : result.lessons});
-            });
-        }
-
         return {lessons: []};
     },
     prepareLessons: function (lessons) {
@@ -74,18 +79,51 @@ var Notifier = React.createClass({
 
         return lessons;
     },
-    componentDidMount: function () {
-        //this.fetchFeedFromLaracasts();
+    checkForNewLessons: function () {
+        this.fetchFeedFromLaracasts();
         //setInterval(this.fetchFeedFromLaracasts, this.props.pollInterval);
-        //this.setState({lessons: this.props.lessons});
+    },
+    componentDidMount: function () {
+        if(typeof chrome.storage === 'object') {
+            var that = this;
+
+            // This is loaded when it loads
+            chrome.storage.sync.get('lessons', function (result) {
+                that.setState({lessons : result.lessons});
+
+                that.checkForNewLessons();
+            });
+        }
     },
     fetchFeedFromLaracasts: function () {
+
+        var that = this;
+
         $.ajax({
             url: this.props.url,
             dataType: 'json',
             success: function (data) {
+                var feed = this.prepareLessons(data);
 
-                this.setState({lessons: this.prepareLessons(data)});
+                var lessons = this.state.lessons;
+
+                var newLessons = feed.filter(function (item) {
+                    for(var i = 0; i < that.state.lessons.length; i++) {
+                        if(item.title == that.state.lessons[i].title) {
+                            return false;
+                        }
+                    }
+                    lessons.unshift(item);
+
+                    return true;
+                });
+
+                // Sort by Date
+                lessons.sort(function (a, b) {
+                   return new Date(b.date) - new Date(a.date);
+                });
+
+                this.setState({lessons: lessons});
 
                 this.updateBadge();
 
@@ -106,8 +144,6 @@ var Notifier = React.createClass({
     },
     refreshFeed: function (e) {
         e.preventDefault();
-
-        console.log('Refreshing feed');
 
         this.fetchFeedFromLaracasts();
     },
@@ -150,6 +186,18 @@ var Notifier = React.createClass({
 
         this.storeLessons();
     },
+    removeLesson: function (key) {
+
+        var lessons = this.state.lessons;
+
+        lessons.splice(key, 1);
+
+        this.setState({lessons: lessons});
+
+        this.updateBadge();
+
+        this.storeLessons();
+    },
     render: function () {
         return (
             <div>
@@ -158,7 +206,7 @@ var Notifier = React.createClass({
                 <div className="container-fluid">
                     <div className="row">
                         <div className="col-md-12">
-                            <Lessons lessons={this.state.lessons} toggleWatched={this.toggleWatched} />
+                            <Lessons lessons={this.state.lessons} toggleWatched={this.toggleWatched} removeLesson={this.removeLesson} />
                         </div>
                     </div>
                 </div>
@@ -168,6 +216,6 @@ var Notifier = React.createClass({
 });
 
 React.render(
-    <Notifier url="http://laracasts-feed.mariobasic.app/api/v1/feed/lessons" pollInterval={10000} />,
+    <Notifier url="http://laracasts-feed.mariobasic.app/api/v1/feed/lessons" pollInterval={2000} />,
     document.getElementById('notifier')
 );
