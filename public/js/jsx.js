@@ -13,19 +13,11 @@ var Lesson = React.createClass({displayName: 'Lesson',
 });
 
 var Lessons = React.createClass({displayName: 'Lessons',
-    toggleWatched: function (key) {
-
-        this.props.lessons[key].watched = this.props.lessons[key].watched == false;
-
-        this.props.updateBadge();
-
-        this.forceUpdate();
-    },
     render: function () {
         var that = this;
         var lessonNodes = this.props.lessons.map(function (lesson, key) {
             return (
-                React.createElement(Lesson, {item: lesson, watched: lesson.watched, toggleWatched: that.toggleWatched.bind(this, key), date: lesson.date, heading: lesson.title, text: lesson.summary, href: lesson.link})
+                React.createElement(Lesson, {item: lesson, watched: lesson.watched, toggleWatched: that.props.toggleWatched.bind(this, key), date: lesson.date, heading: lesson.title, text: lesson.summary, href: lesson.link})
             );
         });
         return (
@@ -38,11 +30,6 @@ var Lessons = React.createClass({displayName: 'Lessons',
 });
 
 var Navbar = React.createClass({displayName: 'Navbar',
-    markAllWatched: function (e) {
-        e.preventDefault();
-        console.log('All marked as watched!');
-        this.props.markAllWatched();
-    },
     render: function () {
         return (
             React.createElement("nav", {className: "navbar navbar-default", role: "navigation"}, 
@@ -56,7 +43,7 @@ var Navbar = React.createClass({displayName: 'Navbar',
                     ), 
                     React.createElement("div", {className: "collapse navbar-collapse", id: "bs-example-navbar-collapse-1"}, 
                         React.createElement("ul", {className: "nav navbar-nav"}, 
-                            React.createElement("li", null, React.createElement("a", {onClick: this.markAllWatched, href: "#"}, React.createElement("i", {className: "fa fa-fw fa-eye"}), " Mark All Watched")), 
+                            React.createElement("li", null, React.createElement("a", {onClick: this.props.markAllWatched, href: "#"}, React.createElement("i", {className: "fa fa-fw fa-eye"}), " Mark All Watched")), 
                             React.createElement("li", null, React.createElement("a", {onClick: this.props.refreshFeed, href: "#"}, React.createElement("i", {className: "fa fa-fw fa-refresh"}), " Refresh Feed"))
                         )
                     )
@@ -68,6 +55,16 @@ var Navbar = React.createClass({displayName: 'Navbar',
 
 var Notifier = React.createClass({displayName: 'Notifier',
     getInitialState: function () {
+
+        if(typeof chrome.storage === 'object') {
+            var that = this;
+
+            // This is loaded when it loads
+            chrome.storage.sync.get('lessons', function (result) {
+                that.setState({lessons : result.lessons});
+            });
+        }
+
         return {lessons: []};
     },
     prepareLessons: function (lessons) {
@@ -78,7 +75,7 @@ var Notifier = React.createClass({displayName: 'Notifier',
         return lessons;
     },
     componentDidMount: function () {
-        this.fetchFeedFromLaracasts();
+        //this.fetchFeedFromLaracasts();
         //setInterval(this.fetchFeedFromLaracasts, this.props.pollInterval);
         //this.setState({lessons: this.props.lessons});
     },
@@ -87,17 +84,31 @@ var Notifier = React.createClass({displayName: 'Notifier',
             url: this.props.url,
             dataType: 'json',
             success: function (data) {
+
                 this.setState({lessons: this.prepareLessons(data)});
+
                 this.updateBadge();
+
+                this.storeLessons();
+
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
             }.bind(this)
         });
     },
+    storeLessons: function () {
+        if(typeof chrome.storage === 'object') {
+            chrome.storage.sync.set({'lessons': this.state.lessons}, function() {
+                console.log('Lessons saved');
+            });
+        }
+    },
     refreshFeed: function (e) {
         e.preventDefault();
+
         console.log('Refreshing feed');
+
         this.fetchFeedFromLaracasts();
     },
     updateBadge: function () {
@@ -113,15 +124,31 @@ var Notifier = React.createClass({displayName: 'Notifier',
         }
 
     },
-    markAllWatched: function () {
-        this.state.lessons.map(function (lesson) {
-            lesson.watched = true;
+    markAllWatched: function (e) {
+        e.preventDefault();
+
+        var lessons = this.state.lessons;
+
+        lessons.forEach(function (lesson) {
+           lesson.watched = true;
         });
+
+        this.setState({lessons: lessons});
 
         this.updateBadge();
 
-        this.forceUpdate();
+        this.storeLessons();
+    },
+    toggleWatched: function (key) {
+        var lessons = this.state.lessons;
 
+        lessons[key].watched =lessons[key].watched == false;
+
+        this.setState({lessons: lessons});
+
+        this.updateBadge();
+
+        this.storeLessons();
     },
     render: function () {
         return (
@@ -131,7 +158,7 @@ var Notifier = React.createClass({displayName: 'Notifier',
                 React.createElement("div", {className: "container-fluid"}, 
                     React.createElement("div", {className: "row"}, 
                         React.createElement("div", {className: "col-md-12"}, 
-                            React.createElement(Lessons, {updateBadge: this.updateBadge, lessons: this.state.lessons})
+                            React.createElement(Lessons, {lessons: this.state.lessons, toggleWatched: this.toggleWatched})
                         )
                     )
                 )

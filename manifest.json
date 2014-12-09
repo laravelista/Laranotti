@@ -5,7 +5,8 @@
   "version": "0.1.0",
   "permissions": [
     "http://laracasts-feed.mariobasic.app/api/v1/feed/lessons",
-    "notifications"
+    "notifications",
+    "storage"
   ],
   "browser_action": {
     "default_icon": "laracasts.png",
