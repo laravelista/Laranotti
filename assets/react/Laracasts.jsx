@@ -118,6 +118,8 @@ var Notifier = React.createClass({
                     return true;
                 });
 
+                console.log(newLessons);
+
                 // Sort by Date
                 lessons.sort(function (a, b) {
                    return new Date(b.date) - new Date(a.date);
@@ -219,3 +221,43 @@ React.render(
     <Notifier url="http://laracasts-feed.mariobasic.app/api/v1/feed/lessons" pollInterval={2000} />,
     document.getElementById('notifier')
 );
+
+function resolveAlarm(alarm) {
+    console.log('Got alarm', alarm);
+    // |alarm| can be undefined because onAlarm also gets called from
+    // window.setTimeout on old chrome versions.
+    if (alarm && alarm.name == 'pollInterval') {
+        /*Notifier.fetchFeedFromLaracasts();*/
+        console.log('fetch');
+
+        chrome.notifications.create('example-notification', {
+            type: "basic",
+            title: "Case Study: The Laravel Installer",
+            message: "To continue our learning, let's review the makeup of Laravel's command-line installer tool. In fact, we'll reproduce it from scratch!",
+            iconUrl: "laracasts-logo.jpg",
+            buttons: [
+                {
+                    title: 'Watch'
+                },
+                {
+                    title: 'Mark as watched'
+                }
+
+            ]
+        }, function () {
+        });
+    }
+}
+
+if(typeof chrome.alarms === 'object') {
+
+    chrome.alarms.clearAll();
+
+
+    console.log('setting alarm');
+    chrome.alarms.onAlarm.addListener(resolveAlarm);
+
+    chrome.alarms.create('pollInterval', {periodInMinutes: 1});
+}
+
+
