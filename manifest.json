@@ -10,7 +10,11 @@
     "alarms"
   ],
   "background": {
-    "scripts": ["public/js/jsx.js"],
+    "scripts": [
+      "public/js/vendor/jquery.js",
+      "public/js/vendor/react.js",
+      "public/js/jsx.js"
+    ],
     "persistent": false
   },
   "browser_action": {
