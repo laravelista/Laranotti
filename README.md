@@ -1,10 +1,8 @@
 # Laracasts Chrome Extension
 
-*+Work in progress ... readme will be updated soon.**
+**Work in progress ... readme will be updated soon.**
 
 ![ ](http://img.shields.io/gratipay/mabasic.svg)
-
-<img src="//img.shields.io/gratipay/mabasic.svg">
 
 ## Description
 
@@ -32,9 +30,3 @@ Lessons and their state is synced across PC's so that you never have to keep log
 ## Screenshots
 
 ![ ](sc1.png)
-
-![ ](sc2.png)
-
-![ ](sc3.png)
-
-![ ](sc4.png)
