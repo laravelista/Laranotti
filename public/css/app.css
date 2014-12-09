@@ -4930,7 +4930,8 @@ button.close {
 .laracasts-lesson {
   margin-left: -15px;
   margin-right: -15px;
-  padding: 15px; }
+  padding: 15px;
+  border-bottom: 1px dotted #555; }
 
 .laracasts-lesson h4 i {
   cursor: pointer; }

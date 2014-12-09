@@ -1,23 +1,9 @@
 var Lesson = React.createClass({
     render: function () {
-        
-        console.log(this.props.watched);
-
-        if(this.props.watched == false) {
-            return (
-                <div className="laracasts-lesson">
-                    <p><small><b><i className="fa fa-fw fa-clock-o"></i> {this.props.date}</b></small></p>
-                    <h4><i onClick={this.props.toggleWatched} className="fa fa-fw fa-square-o"></i> <a target="_blank" href={this.props.href}>{this.props.heading}</a></h4>
-                    <p>{this.props.text}</p>
-                    <br />
-                </div>
-            );
-        }
-
         return (
             <div className="laracasts-lesson">
                 <p><small><b><i className="fa fa-fw fa-clock-o"></i> {this.props.date}</b></small></p>
-                <h4><i onClick={this.props.toggleWatched} className="fa fa-fw fa-check-square-o"></i> <a target="_blank" href={this.props.href}>{this.props.heading}</a></h4>
+                <h4><i onClick={this.props.toggleWatched} className={this.props.watched ? 'fa fa-fw fa-check-square-o' : 'fa fa-fw fa-square-o'}></i> <a target="_blank" href={this.props.href}>{this.props.heading}</a></h4>
                 <p>{this.props.text}</p>
                 <br />
             </div>
@@ -27,24 +13,19 @@ var Lesson = React.createClass({
 });
 
 var Lessons = React.createClass({
-    toggleWatched: function (e) {
-        console.log('mark as watched');
+    toggleWatched: function (key) {
 
-        var icon = $(e.target);
+        this.props.lessons[key].watched = this.props.lessons[key].watched == false;
 
-        if(icon.hasClass('fa-square-o')) {
-            icon.removeClass('fa-square-o').addClass('fa-check-square-o');
-        }
-        else {
-            icon.removeClass('fa-check-square-o').addClass('fa-square-o');
-        }
+        this.props.updateBadge();
 
+        this.forceUpdate();
     },
     render: function () {
         var that = this;
-        var lessonNodes = this.props.data.map(function (item) {
+        var lessonNodes = this.props.lessons.map(function (lesson, key) {
             return (
-                <Lesson item={item} watched={item.watched} toggleWatched={that.toggleWatched} date={item.date} heading={item.title} text={item.summary} href={item.link} />
+                <Lesson item={lesson} watched={lesson.watched} toggleWatched={that.toggleWatched.bind(this, key)} date={lesson.date} heading={lesson.title} text={lesson.summary} href={lesson.link} />
             );
         });
         return (
@@ -60,6 +41,7 @@ var Navbar = React.createClass({
     markAllWatched: function (e) {
         e.preventDefault();
         console.log('All marked as watched!');
+        this.props.markAllWatched();
     },
     render: function () {
         return (
@@ -86,31 +68,27 @@ var Navbar = React.createClass({
 
 var Notifier = React.createClass({
     getInitialState: function () {
-        return {data: []};
+        return {lessons: []};
     },
-    markAllAsNotWatched: function () {
-        this.state.data.map(function (lesson) {
+    prepareLessons: function (lessons) {
+        lessons.map(function (lesson) {
             lesson.watched = false;
         });
-        console.log(this.state.data);
+
+        return lessons;
     },
     componentDidMount: function () {
         this.fetchFeedFromLaracasts();
         //setInterval(this.fetchFeedFromLaracasts, this.props.pollInterval);
-        //this.setState({data: this.props.data});
-        //this.markAllAsNotWatched();
+        //this.setState({lessons: this.props.lessons});
     },
     fetchFeedFromLaracasts: function () {
         $.ajax({
             url: this.props.url,
             dataType: 'json',
-            async: false,
             success: function (data) {
-                this.setState({data: data});
-                /*console.log(data.length.toString());*/
-                this.markAllAsNotWatched();
-                chrome.browserAction.setBadgeText({text: data.length.toString()});
-
+                this.setState({lessons: this.prepareLessons(data)});
+                this.updateBadge();
             }.bind(this),
             error: function (xhr, status, err) {
                 console.error(this.props.url, status, err.toString());
@@ -122,15 +100,38 @@ var Notifier = React.createClass({
         console.log('Refreshing feed');
         this.fetchFeedFromLaracasts();
     },
+    updateBadge: function () {
+
+        // Count number of unwatched lessons from state
+        var numberOfUnwatchedLessons = this.state.lessons.filter(function (lesson) {
+            return lesson.watched == false;
+        }).length;
+
+        if(typeof chrome.browserAction === 'object')
+        {
+            chrome.browserAction.setBadgeText({text: numberOfUnwatchedLessons.toString()});
+        }
+
+    },
+    markAllWatched: function () {
+        this.state.lessons.map(function (lesson) {
+            lesson.watched = true;
+        });
+
+        this.updateBadge();
+
+        this.forceUpdate();
+
+    },
     render: function () {
         return (
             <div>
-                <Navbar lessons={this.state.data} refreshFeed={this.refreshFeed} />
+                <Navbar markAllWatched={this.markAllWatched} lessons={this.state.lessons} refreshFeed={this.refreshFeed} />
 
                 <div className="container-fluid">
                     <div className="row">
                         <div className="col-md-12">
-                            <Lessons data={this.state.data} />
+                            <Lessons updateBadge={this.updateBadge} lessons={this.state.lessons} />
                         </div>
                     </div>
                 </div>
