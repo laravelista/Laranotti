@@ -1,6 +1,6 @@
 # Laracasts Chrome Extension
 
-**Work in progress ... readme will be updated soon.**
+**Extension is complete, but not yet released because I have to deploy an Laravel app that provides JSON feed.** 
 
 ![ ](http://img.shields.io/gratipay/mabasic.svg)
 
@@ -10,7 +10,7 @@ This extension fetches and notifies you of latest lessons from [Laracasts](https
 
 **You get a desktop notification when a new lesson is released.** You can then decide to watch it or mark it as watched.
 
-Lessons and their state is synced across PC's so that you never have to keep log of watched or unwatched lessons.
+Lessons and their state are synced across PC's so that you never have to keep log of watched or unwatched lessons.
 
 ## Features
 
@@ -20,12 +20,9 @@ Lessons and their state is synced across PC's so that you never have to keep log
 - Manually fetch lessons from Laracasts
 - Syncs across PC's using Google Chrome storage
 - Extension badge notifies the user how many unwatched lessons he has
-
-## Still missing features
-
-- [ ] Desktop notifications
-- [ ] Background events
-- [ ] Automatically fetch new lessons from Laracasts _(This is done, but not yet implemented because of the development status of the extension)_
+- Desktop notifications [**NEW**]
+- Background events [**NEW**]
+- Automatically fetch new lessons from Laracasts [**NEW**]
 
 ## Screenshots
 

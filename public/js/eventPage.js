@@ -1,8 +1,8 @@
 var Laracasts = {
 
-    lessons : [],
+    lessons: [],
 
-    url:  "http://laracasts-feed.mariobasic.app/api/v1/feed/lessons",
+    url: "http://laracasts-feed.mariobasic.app/api/v1/feed/lessons",
 
     prepareLessons: function (lessons) {
         lessons.map(function (lesson) {
@@ -12,7 +12,7 @@ var Laracasts = {
         return lessons;
     },
 
-    getLessonsFromStorage: function() {
+    getLessonsFromStorage: function () {
 
         var that = this;
 
@@ -20,7 +20,7 @@ var Laracasts = {
 
         chrome.storage.sync.get('lessons', function (result) {
 
-            if(result.lessons === undefined) result.lessons = [];
+            if (result.lessons === undefined) result.lessons = [];
 
             that.lessons = result.lessons;
 
@@ -31,21 +31,24 @@ var Laracasts = {
         return deferredObject.promise();
     },
 
-    getLessonsFromStorageAndUpdate: function() {
+    getLessonsFromStorageAndUpdate: function () {
+
+        var that = this;
+
         chrome.storage.sync.get('lessons', function (result) {
 
-            if(result.lessons === undefined) result.lessons = [];
+            if (result.lessons === undefined) result.lessons = [];
 
-            this.lessons = result.lessons;
+            that.lessons = result.lessons;
 
-            this.fetchFeedFromLaracasts();
+            that.fetchFeedFromLaracasts();
 
         });
     },
 
     searchForLessonByTitle: function (title) {
-        for(var i = 0; i < this.lessons.length; i++) {
-            if(title == this.lessons[i].title) {
+        for (var i = 0; i < this.lessons.length; i++) {
+            if (title == this.lessons[i].title) {
                 return i;
             }
         }
@@ -170,19 +173,19 @@ chrome.alarms.create('pollInterval', {periodInMinutes: 1});
 
 
 chrome.notifications.onButtonClicked.addListener(function (notificationId, buttonIndex) {
-    if(notificationId == 'list') {
+    if (notificationId == 'list') {
         if (buttonIndex == 0) {
             Laracasts.getLessonsFromStorage().done(function (Laracasts) {
                 Laracasts.markAllWatched()
             });
 
-            chrome.notifications.clear(notificationId, function (wasCleared) {});
+            chrome.notifications.clear(notificationId, function (wasCleared) { });
         }
         if (buttonIndex == 1) {
             chrome.tabs.create({
                 url: "https://laracasts.com/lessons"
             });
-            chrome.notifications.clear(notificationId, function (wasCleared) {});
+            chrome.notifications.clear(notificationId, function (wasCleared) { });
         }
     }
     else {
@@ -206,7 +209,7 @@ chrome.notifications.onButtonClicked.addListener(function (notificationId, butto
                     });
                 });
 
-                chrome.notifications.clear(notificationId, function (wasCleared) {});
+                chrome.notifications.clear(notificationId, function (wasCleared) { });
 
             });
 
@@ -219,10 +222,27 @@ chrome.notifications.onButtonClicked.addListener(function (notificationId, butto
                 // (I assume that it is unwatched)
                 Laracasts.toggleWatched(notificationId);
 
-                chrome.notifications.clear(notificationId, function (wasCleared) {});
+                chrome.notifications.clear(notificationId, function (wasCleared) { });
             });
 
         }
     }
+
+});
+
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+
+    // when tab is closed mark lesson as watched
+    chrome.tabs.onRemoved.addListener(function (tabId, removeInfo) {
+        // If the tab closed is the tab with  the lesson opened
+        if (request.tabId == tabId) {
+            Laracasts.getLessonsFromStorage().done(function (Laracasts) {
+                // Mark it as watched
+                Laracasts.toggleWatched(request.lessonId);
+
+                sendResponse();
+            });
+        }
+    });
 
 });
