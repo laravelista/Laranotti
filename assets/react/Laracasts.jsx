@@ -128,6 +128,9 @@ var Notifier = React.createClass({
 
             // This is loaded when it loads
             chrome.storage.sync.get('lessons', function (result) {
+
+                if(result.lessons === undefined) result.lessons = [];
+
                 that.setState({lessons: result.lessons});
 
                 that.checkForNewLessons();
@@ -274,118 +277,8 @@ var Notifier = React.createClass({
     }
 });
 
-var Laracasts = React.render(
+React.render(
     <Notifier url="http://laracasts-feed.mariobasic.app/api/v1/feed/lessons" pollInterval={2000} />,
     document.getElementById('notifier')
 );
-
-function createBasicNotificationForLesson(lessonId, title, message) {
-    if (typeof chrome.notifications === 'object') {
-        chrome.notifications.create(lessonId, {
-            type: "basic",
-            title: title,
-            message: message,
-            iconUrl: "laracasts-logo.jpg",
-            buttons: [
-                {
-                    title: 'Watch'
-                },
-                {
-                    title: 'Mark as Watched'
-                }
-            ]
-        }, function () {
-        });
-    }
-}
-
-function createListNotificationForLessons(title, message, items) {
-    if (typeof chrome.notifications === 'object') {
-        chrome.notifications.create('list', {
-            type: "list",
-            title: title,
-            message: message,
-            items: items,
-            iconUrl: "laracasts-logo.jpg",
-            buttons: [
-                {
-                    title: 'Mark all Watched'
-                },
-                {
-                    title: 'View on Laracasts'
-                }
-            ]
-        }, function () {
-        });
-    }
-}
-
-function resolveAlarm(alarm) {
-    // |alarm| can be undefined because onAlarm also gets called from
-    // window.setTimeout on old chrome versions.
-    if (alarm && alarm.name == 'pollInterval') {
-        Laracasts.fetchFeedFromLaracasts();
-    }
-}
-
-if (typeof chrome.alarms === 'object') {
-
-    // Clear all alarms
-    chrome.alarms.clearAll();
-
-    // Add a listener to resolve alarms
-    chrome.alarms.onAlarm.addListener(resolveAlarm);
-
-    // Create a new alarm for fetching feed from Laracasts
-    chrome.alarms.create('pollInterval', {periodInMinutes: 1});
-}
-
-if (typeof chrome.notifications === 'object') {
-
-    chrome.notifications.onButtonClicked.addListener(function (notificationId, buttonIndex) {
-        if(notificationId == 'list') {
-            if (buttonIndex == 0) {
-                Laracasts.markAllWatched();
-                chrome.notifications.clear(notificationId, function (wasCleared) {});
-            }
-            if (buttonIndex == 1) {
-                chrome.tabs.create({
-                    url: "https://laracasts.com/lessons"
-                });
-                chrome.notifications.clear(notificationId, function (wasCleared) {});
-            }
-        }
-        else {
-            if (buttonIndex == 0) {
-                //open a tab to watch lesson on laracasts
-
-                // detect
-                // TODO: Everything is duplicating because I am calling this script two times :(
-
-                chrome.tabs.create({
-                    url: Laracasts.state.lessons[parseInt(notificationId)].link
-                }, function(tab) {
-                    // when tab is closed mark lesson as watched
-                    chrome.tabs.onRemoved.addListener( function (tabId, removeInfo) {
-                        // If the tab closed is the tab with  the lesson opened
-                        if(tab.id == tabId) {
-                            // Mark it as watched
-                            Laracasts.toggleWatched(notificationId);
-                        }
-                    });
-                });
-
-                chrome.notifications.clear(notificationId, function (wasCleared) {});
-            }
-            if (buttonIndex == 1) {
-                // mark that lesson watched
-                // (I assume that it is unwatched)
-                Laracasts.toggleWatched(notificationId);
-
-                chrome.notifications.clear(notificationId, function (wasCleared) {});
-            }
-        }
-
-    });
-}
 

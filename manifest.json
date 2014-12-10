@@ -11,7 +11,11 @@
     "tabs"
   ],
   "background": {
-    "page": "popup.html",
+    "scripts": [
+      "public/js/vendor/jquery.js",
+      "public/js/helpers.js",
+      "public/js/eventPage.js"
+    ],
     "persistent": false
   },
   "browser_action": {
