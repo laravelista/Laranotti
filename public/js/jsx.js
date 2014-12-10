@@ -3,10 +3,19 @@ var Lesson = React.createClass({displayName: 'Lesson',
         return (
             React.createElement("div", {className: "laracasts-lesson"}, 
                 React.createElement("p", null, 
-                    React.createElement("small", null, React.createElement("b", null, React.createElement("i", {className: "fa fa-fw fa-clock-o"}), " ", this.props.date)), 
-                    React.createElement("button", {onClick: this.props.removeLesson, type: "button", className: "close", 'data-dismiss': "alert"}, React.createElement("span", {'aria-hidden': "true"}, "×"), React.createElement("span", {className: "sr-only"}, "Close"))
+                    React.createElement("small", null, 
+                        React.createElement("b", null, 
+                            React.createElement("i", {className: "fa fa-fw fa-clock-o"}), " ", this.props.date)
+                    ), 
+                    React.createElement("button", {onClick: this.props.removeLesson, type: "button", className: "close", 'data-dismiss': "alert"}, 
+                        React.createElement("span", {'aria-hidden': "true"}, "×"), 
+                        React.createElement("span", {className: "sr-only"}, "Close")
+                    )
                 ), 
-                React.createElement("h4", null, React.createElement("i", {onClick: this.props.toggleWatched, className: this.props.watched ? 'fa fa-fw fa-check-square-o' : 'fa fa-fw fa-square-o'}), " ", React.createElement("a", {target: "_blank", href: this.props.href}, this.props.heading)), 
+                React.createElement("h4", null, 
+                    React.createElement("i", {onClick: this.props.toggleWatched, className: this.props.watched ? 'fa fa-fw fa-check-square-o' : 'fa fa-fw fa-square-o'}), 
+                    React.createElement("a", {target: "_blank", href: this.props.href}, this.props.heading)
+                ), 
                 React.createElement("p", null, this.props.text), 
                 React.createElement("br", null)
             )
@@ -42,22 +51,52 @@ var Navbar = React.createClass({displayName: 'Navbar',
                             React.createElement("span", {className: "sr-only"}, "Toggle navigation"), 
                             React.createElement("i", {className: "fa fa-fw fa-cogs"})
                         ), 
-                        React.createElement("a", {target: "_blank", className: "navbar-brand", href: "https://laracasts.com"}, "Laracasts ", React.createElement("i", null, "Notifier"))
+                        React.createElement("a", {target: "_blank", className: "navbar-brand", href: "https://laracasts.com"}, "Laracasts", 
+                            React.createElement("i", null, "Notifier")
+                        )
                     ), 
                     React.createElement("div", {className: "collapse navbar-collapse", id: "bs-example-navbar-collapse-1"}, 
                         React.createElement("ul", {className: "nav navbar-nav"}, 
-                            React.createElement("li", null, React.createElement("a", {onClick: this.props.markAllWatched, href: "#"}, React.createElement("i", {className: "fa fa-fw fa-eye"}), " Mark All Watched")), 
-                            React.createElement("li", null, React.createElement("a", {onClick: this.props.refreshFeed, href: "#"}, React.createElement("i", {className: "fa fa-fw fa-refresh"}), " Refresh Feed")), 
+                            React.createElement("li", null, 
+                                React.createElement("a", {onClick: this.props.markAllWatched, href: "#"}, 
+                                    React.createElement("i", {className: "fa fa-fw fa-eye"}), 
+                                    "Mark All Watched")
+                            ), 
+                            React.createElement("li", null, 
+                                React.createElement("a", {onClick: this.props.refreshFeed, href: "#"}, 
+                                    React.createElement("i", {className: "fa fa-fw fa-refresh"}), 
+                                    "Refresh Feed")
+                            ), 
 
                             React.createElement("li", {className: "dropdown"}, 
-                                React.createElement("a", {href: "#", className: "dropdown-toggle", 'data-toggle': "dropdown", role: "button", 'aria-expanded': "false"}, React.createElement("i", {className: "fa fa-fw fa-info"}), " About ", React.createElement("span", {className: "caret"})), 
+                                React.createElement("a", {href: "#", className: "dropdown-toggle", 'data-toggle': "dropdown", role: "button", 'aria-expanded': "false"}, 
+                                    React.createElement("i", {className: "fa fa-fw fa-info"}), 
+                                    "About", 
+                                    React.createElement("span", {className: "caret"})
+                                ), 
                                 React.createElement("ul", {className: "dropdown-menu", role: "menu"}, 
-                                    React.createElement("li", null, React.createElement("a", {target: "_blank", href: "https://github.com/mabasic/laracasts-chrome-extension/issues"}, React.createElement("i", {className: "fa fa-fw fa-bug"}), " Report an Issue")), 
-                                    React.createElement("li", null, React.createElement("a", {target: "_blank", href: "https://github.com/mabasic/laracasts-chrome-extension"}, React.createElement("i", {className: "fa fa-fw fa-github"}), " View on GitHub")), 
+                                    React.createElement("li", null, 
+                                        React.createElement("a", {target: "_blank", href: "https://github.com/mabasic/laracasts-chrome-extension/issues"}, 
+                                            React.createElement("i", {className: "fa fa-fw fa-bug"}), 
+                                            "Report an Issue")
+                                    ), 
+                                    React.createElement("li", null, 
+                                        React.createElement("a", {target: "_blank", href: "https://github.com/mabasic/laracasts-chrome-extension"}, 
+                                            React.createElement("i", {className: "fa fa-fw fa-github"}), 
+                                            "View on GitHub")
+                                    ), 
 
-                                    React.createElement("li", null, React.createElement("a", {target: "_blank", href: "https://gratipay.com/mabasic/"}, React.createElement("i", {className: "fa fa-fw fa-usd"}), " Donate Developer")), 
+                                    React.createElement("li", null, 
+                                        React.createElement("a", {target: "_blank", href: "https://gratipay.com/mabasic/"}, 
+                                            React.createElement("i", {className: "fa fa-fw fa-usd"}), 
+                                            "Donate Developer")
+                                    ), 
 
-                                    React.createElement("li", null, React.createElement("a", {target: "_blank", href: "http://mariobasic.com"}, React.createElement("i", {className: "fa fa-fw fa-heart-o"}), " Developer Blog"))
+                                    React.createElement("li", null, 
+                                        React.createElement("a", {target: "_blank", href: "http://mariobasic.com"}, 
+                                            React.createElement("i", {className: "fa fa-fw fa-heart-o"}), 
+                                            "Developer Blog")
+                                    )
                                 )
                             )
                         )
@@ -84,15 +123,22 @@ var Notifier = React.createClass({displayName: 'Notifier',
         //setInterval(this.fetchFeedFromLaracasts, this.props.pollInterval);
     },
     componentDidMount: function () {
-        if(typeof chrome.storage === 'object') {
+        if (typeof chrome.storage === 'object') {
             var that = this;
 
             // This is loaded when it loads
             chrome.storage.sync.get('lessons', function (result) {
-                that.setState({lessons : result.lessons});
+                that.setState({lessons: result.lessons});
 
                 that.checkForNewLessons();
             });
+        }
+    },
+    searchForLessonByTitle: function (title) {
+        for(var i = 0; i < this.state.lessons.length; i++) {
+            if(title == this.state.lessons[i].title) {
+                return i;
+            }
         }
     },
     fetchFeedFromLaracasts: function () {
@@ -108,8 +154,8 @@ var Notifier = React.createClass({displayName: 'Notifier',
                 var lessons = this.state.lessons;
 
                 var newLessons = feed.filter(function (item) {
-                    for(var i = 0; i < that.state.lessons.length; i++) {
-                        if(item.title == that.state.lessons[i].title) {
+                    for (var i = 0; i < that.state.lessons.length; i++) {
+                        if (item.title == that.state.lessons[i].title) {
                             return false;
                         }
                     }
@@ -118,14 +164,24 @@ var Notifier = React.createClass({displayName: 'Notifier',
                     return true;
                 });
 
-                console.log(newLessons);
-
                 // Sort by Date
                 lessons.sort(function (a, b) {
-                   return new Date(b.date) - new Date(a.date);
+                    return new Date(b.date) - new Date(a.date);
                 });
 
                 this.setState({lessons: lessons});
+
+                if (newLessons.length == 1) {
+                    var id = this.searchForLessonByTitle(newLessons[0].title);
+                    createBasicNotificationForLesson(id.toString(), newLessons[0].title, newLessons[0].summary);
+                }
+                else if (newLessons.length > 1) {
+                    var items = [];
+                    newLessons.forEach(function (lesson) {
+                        items.push({title: lesson.title, message: lesson.summary});
+                    });
+                    createListNotificationForLessons(newLessons.length.toString() + ' New Lessons on Laracasts.', 'You have ' + newLessons.length.toString() + 'lessons unwatched.', items);
+                }
 
                 this.updateBadge();
 
@@ -138,8 +194,8 @@ var Notifier = React.createClass({displayName: 'Notifier',
         });
     },
     storeLessons: function () {
-        if(typeof chrome.storage === 'object') {
-            chrome.storage.sync.set({'lessons': this.state.lessons}, function() {
+        if (typeof chrome.storage === 'object') {
+            chrome.storage.sync.set({'lessons': this.state.lessons}, function () {
                 console.log('Lessons saved');
             });
         }
@@ -156,19 +212,20 @@ var Notifier = React.createClass({displayName: 'Notifier',
             return lesson.watched == false;
         }).length;
 
-        if(typeof chrome.browserAction === 'object')
-        {
+        if (typeof chrome.browserAction === 'object') {
             chrome.browserAction.setBadgeText({text: numberOfUnwatchedLessons.toString()});
         }
 
     },
     markAllWatched: function (e) {
-        e.preventDefault();
+        if(e !== undefined) {
+            e.preventDefault();
+        }
 
         var lessons = this.state.lessons;
 
         lessons.forEach(function (lesson) {
-           lesson.watched = true;
+            lesson.watched = true;
         });
 
         this.setState({lessons: lessons});
@@ -180,7 +237,7 @@ var Notifier = React.createClass({displayName: 'Notifier',
     toggleWatched: function (key) {
         var lessons = this.state.lessons;
 
-        lessons[key].watched =lessons[key].watched == false;
+        lessons[key].watched = lessons[key].watched == false;
 
         this.setState({lessons: lessons});
 
@@ -217,47 +274,118 @@ var Notifier = React.createClass({displayName: 'Notifier',
     }
 });
 
-React.render(
+var Laracasts = React.render(
     React.createElement(Notifier, {url: "http://laracasts-feed.mariobasic.app/api/v1/feed/lessons", pollInterval: 2000}),
     document.getElementById('notifier')
 );
 
-function resolveAlarm(alarm) {
-    console.log('Got alarm', alarm);
-    // |alarm| can be undefined because onAlarm also gets called from
-    // window.setTimeout on old chrome versions.
-    if (alarm && alarm.name == 'pollInterval') {
-        /*Notifier.fetchFeedFromLaracasts();*/
-        console.log('fetch');
-
-        chrome.notifications.create('example-notification', {
+function createBasicNotificationForLesson(lessonId, title, message) {
+    if (typeof chrome.notifications === 'object') {
+        chrome.notifications.create(lessonId, {
             type: "basic",
-            title: "Case Study: The Laravel Installer",
-            message: "To continue our learning, let's review the makeup of Laravel's command-line installer tool. In fact, we'll reproduce it from scratch!",
+            title: title,
+            message: message,
             iconUrl: "laracasts-logo.jpg",
             buttons: [
                 {
                     title: 'Watch'
                 },
                 {
-                    title: 'Mark as watched'
+                    title: 'Mark as Watched'
                 }
-
             ]
         }, function () {
         });
     }
 }
 
-if(typeof chrome.alarms === 'object') {
+function createListNotificationForLessons(title, message, items) {
+    if (typeof chrome.notifications === 'object') {
+        chrome.notifications.create('list', {
+            type: "list",
+            title: title,
+            message: message,
+            items: items,
+            iconUrl: "laracasts-logo.jpg",
+            buttons: [
+                {
+                    title: 'Mark all Watched'
+                },
+                {
+                    title: 'View on Laracasts'
+                }
+            ]
+        }, function () {
+        });
+    }
+}
 
+function resolveAlarm(alarm) {
+    // |alarm| can be undefined because onAlarm also gets called from
+    // window.setTimeout on old chrome versions.
+    if (alarm && alarm.name == 'pollInterval') {
+        Laracasts.fetchFeedFromLaracasts();
+    }
+}
+
+if (typeof chrome.alarms === 'object') {
+
+    // Clear all alarms
     chrome.alarms.clearAll();
 
-
-    console.log('setting alarm');
+    // Add a listener to resolve alarms
     chrome.alarms.onAlarm.addListener(resolveAlarm);
 
+    // Create a new alarm for fetching feed from Laracasts
     chrome.alarms.create('pollInterval', {periodInMinutes: 1});
 }
 
+if (typeof chrome.notifications === 'object') {
+
+    chrome.notifications.onButtonClicked.addListener(function (notificationId, buttonIndex) {
+        if(notificationId == 'list') {
+            if (buttonIndex == 0) {
+                Laracasts.markAllWatched();
+                chrome.notifications.clear(notificationId, function (wasCleared) {});
+            }
+            if (buttonIndex == 1) {
+                chrome.tabs.create({
+                    url: "https://laracasts.com/lessons"
+                });
+                chrome.notifications.clear(notificationId, function (wasCleared) {});
+            }
+        }
+        else {
+            if (buttonIndex == 0) {
+                //open a tab to watch lesson on laracasts
+
+                // detect
+                // TODO: Everything is duplicating because I am calling this script two times :(
+
+                chrome.tabs.create({
+                    url: Laracasts.state.lessons[parseInt(notificationId)].link
+                }, function(tab) {
+                    // when tab is closed mark lesson as watched
+                    chrome.tabs.onRemoved.addListener( function (tabId, removeInfo) {
+                        // If the tab closed is the tab with  the lesson opened
+                        if(tab.id == tabId) {
+                            // Mark it as watched
+                            Laracasts.toggleWatched(notificationId);
+                        }
+                    });
+                });
+
+                chrome.notifications.clear(notificationId, function (wasCleared) {});
+            }
+            if (buttonIndex == 1) {
+                // mark that lesson watched
+                // (I assume that it is unwatched)
+                Laracasts.toggleWatched(notificationId);
+
+                chrome.notifications.clear(notificationId, function (wasCleared) {});
+            }
+        }
+
+    });
+}
 

@@ -2,19 +2,16 @@
   "manifest_version": 2,
   "name": "Laracasts Notifier",
   "description": "This extension notifies you of new lessons, series and lets you view the latest.",
-  "version": "0.1.0",
+  "version": "0.3.0",
   "permissions": [
     "http://laracasts-feed.mariobasic.app/api/v1/feed/lessons",
     "notifications",
     "storage",
-    "alarms"
+    "alarms",
+    "tabs"
   ],
   "background": {
-    "scripts": [
-      "public/js/vendor/jquery.js",
-      "public/js/vendor/react.js",
-      "public/js/jsx.js"
-    ],
+    "page": "popup.html",
     "persistent": false
   },
   "browser_action": {
