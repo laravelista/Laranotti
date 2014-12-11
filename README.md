@@ -8,6 +8,8 @@ This extension fetches and notifies you of latest lessons from [Laracasts](https
 
 Lessons and their state are synced across PC's so that you never have to keep log of watched or unwatched lessons.
 
+**This extension checks for new lessons every 60 minutes from my [API](https://github.com/mabasic/laracasts-feed) which caches the response for 30 minutes :)**
+
 ## Features
 
 - Fetches latest lessons from Laracasts
