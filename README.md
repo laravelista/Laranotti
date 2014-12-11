@@ -1,14 +1,10 @@
-# Laracasts Chrome Extension
-
-**Extension is complete, but not yet released because I have to deploy an Laravel app that provides JSON feed.** 
+# Laracasts Notifier
 
 ![ ](http://img.shields.io/gratipay/mabasic.svg)
 
 ## Description
 
 This extension fetches and notifies you of latest lessons from [Laracasts](https://laracasts.com) in your Google Chrome browser.
-
-**You get a desktop notification when a new lesson is released.** You can then decide to watch it or mark it as watched.
 
 Lessons and their state are synced across PC's so that you never have to keep log of watched or unwatched lessons.
 
@@ -23,7 +19,26 @@ Lessons and their state are synced across PC's so that you never have to keep lo
 - Desktop notifications [**NEW**]
 - Background events [**NEW**]
 - Automatically fetch new lessons from Laracasts [**NEW**]
+- Detects when you have closed the tab of the lesson you were watching and marks it as watched [**NEW**]
 
 ## Screenshots
 
 ![ ](sc1.png)
+
+## For development
+
+I am using Laravel Elixir, so you can use it like so:
+
+One time run:
+
+```
+gulp
+```
+
+Run and watch for changes:
+
+```
+gulp watch
+```
+
+> I have extended Elixir to work with React.js. Check `gulpfile.js` to view what is included.

@@ -2,7 +2,7 @@ var Laracasts = {
 
     lessons: [],
 
-    url: "http://laracasts-feed.mariobasic.app/api/v1/feed/lessons",
+    url: "http://laracasts-feed.mariobasic.com/api/v1/feed/lessons",
 
     prepareLessons: function (lessons) {
         lessons.map(function (lesson) {
@@ -169,7 +169,7 @@ chrome.alarms.clearAll();
 chrome.alarms.onAlarm.addListener(resolveAlarm);
 
 // Create a new alarm for fetching feed from Laracasts
-chrome.alarms.create('pollInterval', {periodInMinutes: 1});
+chrome.alarms.create('pollInterval', {periodInMinutes: 60});
 
 
 chrome.notifications.onButtonClicked.addListener(function (notificationId, buttonIndex) {

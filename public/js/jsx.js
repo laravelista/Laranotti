@@ -304,7 +304,11 @@ var Notifier = React.createClass({displayName: 'Notifier',
     }
 });
 
+/**
+ * PoolInterval is not being used at the moment.
+ * I think that there is no use for it now because of background eventPage.
+ */
 React.render(
-    React.createElement(Notifier, {url: "http://laracasts-feed.mariobasic.app/api/v1/feed/lessons", pollInterval: 2000}),
+    React.createElement(Notifier, {url: "http://laracasts-feed.mariobasic.com/api/v1/feed/lessons", pollInterval: 2000}),
     document.getElementById('notifier')
 );
