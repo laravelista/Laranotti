@@ -2,6 +2,12 @@
 
 ![ ](http://img.shields.io/gratipay/mabasic.svg)
 
+Install from [Google Chrome store page](https://chrome.google.com/webstore/detail/laracasts-notifier/aidlbngabkfmnfmfjgnmfhihjcpdbbjo)
+
+I have opened a topic on [Laracasts forum](https://laracasts.com/discuss/channels/general-discussion/laracasts-notifier-extension-for-google-chrome) for discussions.
+
+If you are going to tweet about it please use `#LaracastsNotifier` and help me spread the news, thank you.
+
 ## Description
 
 This extension fetches and notifies you of latest lessons from [Laracasts](https://laracasts.com) in your Google Chrome browser.
