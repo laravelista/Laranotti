@@ -163,7 +163,7 @@ function resolveAlarm(alarm) {
 
 
 // Clear all alarms
-chrome.alarms.clearAll();
+// chrome.alarms.clearAll();
 
 // Add a listener to resolve alarms
 chrome.alarms.onAlarm.addListener(resolveAlarm);
