@@ -1,8 +1,8 @@
 {
   "manifest_version": 2,
-  "name": "Laracasts Notifier",
+  "name": "Laracasts Notifier v2",
   "description": "This extension notifies you of new lessons from Laracasts, and lets you view the latest.",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "icons": {
     "16": "laracasts16.png",
     "48": "laracasts48.png",
