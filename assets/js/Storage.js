@@ -8,7 +8,7 @@ class Storage {
         if(lessons !== undefined) lessons = JSON.parse(lessons);
 
         if(lessons === undefined) lessons = [];
-        
+
         return lessons;
     }
 
