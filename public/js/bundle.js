@@ -211,7 +211,7 @@ var Navbar = (function (_React$Component) {
 
             return _React2["default"].createElement(
                 "nav",
-                { className: "navbar navbar-default", role: "navigation" },
+                { className: "navbar navbar-default navbar-inverse", role: "navigation" },
                 _React2["default"].createElement(
                     "div",
                     { className: "container-fluid" },
