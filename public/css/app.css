@@ -1,4 +1,4 @@
-@import url("//fonts.googleapis.com/css?family=Roboto:300,400,500,700");
+@import url("http://fonts.googleapis.com/css?family=Roboto:300,400,500,700");
 /*! normalize.css v3.0.2 | MIT License | git.io/normalize */
 html {
   font-family: sans-serif;
@@ -4018,12 +4018,12 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .navbar {
   position: relative;
   min-height: 64px;
-  margin-bottom: 23px;
+  margin-bottom: 0px;
   border: 1px solid transparent;
 }
 @media (min-width: 768px) {
   .navbar {
-    border-radius: 3px;
+    border-radius: 0px;
   }
 }
 @media (min-width: 768px) {
@@ -4299,8 +4299,8 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 }
 .navbar-fixed-bottom .navbar-nav > li > .dropdown-menu {
   margin-bottom: 0;
-  border-top-right-radius: 3px;
-  border-top-left-radius: 3px;
+  border-top-right-radius: 0px;
+  border-top-left-radius: 0px;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
@@ -8284,28 +8284,6 @@ button.close {
 .fa-medium:before {
   content: "\f23a";
 }
-/*@font-family-sans-serif: "Lato", Helvetica, Arial, sans-serif;
-
-@primary: #F55430;*/
-/*@navbar-default-bg: #ed1c24;*/
-/*
-// Navbar links
-@navbar-default-link-color: #fff;
-@navbar-default-link-hover-color: #000;
-
-// Navbar brand
-@brand-primary: darken(#f15d42, 6.5%);
-
-// Navbar toggle
-@navbar-default-toggle-hover-bg:           #d71119;
-@navbar-default-toggle-border-color:       #ed1c24;
-
-/*/
-/** Background color for `<body>`.
-@body-bg: #333;
-/*/
-/** Global text color on `<body>`.
-@text-color: #fff;*/
 .navbar {
   border: none;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
@@ -8923,8 +8901,6 @@ input[type="checkbox"]:disabled:checked:after,
 .carousel-caption h6 {
   color: inherit;
 }
-/*@import "partials/_buttons";*/
-/*@import "partials/_navigation";*/
 ::-webkit-scrollbar {
   height: 12px;
   width: 12px;
@@ -8937,20 +8913,33 @@ input[type="checkbox"]:disabled:checked:after,
 ::-webkit-scrollbar-corner {
   background: #000;
 }
+/*
+ - On mouse hover change background color
+*/
 .laracasts-lesson:hover {
-  background-color: #222222;
+  background-color: #eeeeee;
 }
+/*
+ - Make it full width
+ - Add border to bottom
+*/
 .laracasts-lesson {
   margin-left: -15px;
   margin-right: -15px;
   padding: 15px;
-  border-bottom: 1px dotted #555;
+  border-bottom: 1px solid #eeeeee;
 }
+/*
+ - Add mouse pointer for toggle watched icon
+*/
 .laracasts-lesson h4 i {
   cursor: pointer;
 }
 body {
   min-width: 357px;
+}
+div.navbar-header button {
+  color: #bbbbbb;
 }
 
 /*# sourceMappingURL=app.css.map */

@@ -1,15 +1,21 @@
 @import "bootstrap/bootstrap";
 @import "font-awesome/font-awesome";
-@import "variables";
 
 @import "bootswatch/paper/bootswatch";
 @import "bootswatch/paper/variables";
 
-/*@import "partials/_buttons";*/
-/*@import "partials/_navigation";*/
+@import "variables";
+
 @import "partials/_scrollbar";
 @import "laracasts/_lessons";
 
 body {
   min-width: 357px;
+}
+
+// Toggle Button Color (Cogs)
+div.navbar-header {
+  button {
+    color: @navbar-inverse-color
+  }
 }

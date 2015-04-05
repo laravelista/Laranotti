@@ -1,14 +1,24 @@
+/*
+ - On mouse hover change background color
+*/
 .laracasts-lesson:hover {
-  background-color: darken(#333, 6.5%);
+  background-color: @gray-lighter;
 }
 
+/*
+ - Make it full width
+ - Add border to bottom
+*/
 .laracasts-lesson {
   margin-left: -15px;
   margin-right: -15px;
   padding: 15px;
-  border-bottom: 1px dotted #555;
+  border-bottom: 1px solid #eeeeee;
 }
 
+/*
+ - Add mouse pointer for toggle watched icon
+*/
 .laracasts-lesson h4 i {
   cursor: pointer;
 }
