@@ -395,19 +395,16 @@ var Notifier = (function (_React$Component) {
     }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
-            if (typeof chrome.storage === 'object') {
-                var that = this;
 
-                // This is loaded when it loads
-                chrome.storage.sync.get('lessons', function (result) {
+            var lessons = localStorage.lessons;
 
-                    if (result.lessons === undefined) result.lessons = [];
+            if (lessons !== undefined) lessons = JSON.parse(lessons);
 
-                    that.setState({ lessons: result.lessons });
+            if (lessons === undefined) lessons = [];
 
-                    that.checkForNewLessons();
-                });
-            }
+            this.setState({ lessons: lessons });
+
+            this.checkForNewLessons();
         }
     }, {
         key: 'searchForLessonByTitle',
@@ -422,8 +419,6 @@ var Notifier = (function (_React$Component) {
         key: 'fetchFeedFromLaracasts',
         value: function fetchFeedFromLaracasts() {
 
-            var that = this;
-
             _$2['default'].ajax({
                 url: this.props.url,
                 dataType: 'json',
@@ -433,11 +428,12 @@ var Notifier = (function (_React$Component) {
                     var lessons = this.state.lessons;
 
                     var newLessons = feed.filter(function (item) {
-                        for (var i = 0; i < that.state.lessons.length; i++) {
-                            if (item.title == that.state.lessons[i].title) {
+                        for (var i = 0; i < lessons.length; i++) {
+                            if (item.title == lessons[i].title) {
                                 return false;
                             }
                         }
+
                         lessons.unshift(item);
 
                         return true;
@@ -445,6 +441,13 @@ var Notifier = (function (_React$Component) {
 
                     // Sort by Date
                     lessons.sort(function (a, b) {
+
+                        var first = new Date(a.date);
+                        var second = new Date(b.date);
+                        var result = second < first;
+                        console.log(result);
+                        console.log(first);
+                        console.log(second);
                         return new Date(b.date) - new Date(a.date);
                     });
 
@@ -473,9 +476,7 @@ var Notifier = (function (_React$Component) {
     }, {
         key: 'storeLessons',
         value: function storeLessons() {
-            if (typeof chrome.storage === 'object') {
-                chrome.storage.sync.set({ lessons: this.state.lessons }, function () {});
-            }
+            localStorage.lessons = JSON.stringify(this.state.lessons);
         }
     }, {
         key: 'refreshFeed',
@@ -492,6 +493,8 @@ var Notifier = (function (_React$Component) {
             var numberOfUnwatchedLessons = this.state.lessons.filter(function (lesson) {
                 return lesson.watched == false;
             }).length;
+
+            if (numberOfUnwatchedLessons == 0) numberOfUnwatchedLessons = '';
 
             if (typeof chrome.browserAction === 'object') {
                 chrome.browserAction.setBadgeText({ text: numberOfUnwatchedLessons.toString() });
@@ -586,8 +589,6 @@ var Notifier = (function (_React$Component) {
 
 exports['default'] = Notifier;
 module.exports = exports['default'];
-
-// Success
 
 //console.log(response.farewell);
 //that.toggleWatched(key);

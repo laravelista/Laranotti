@@ -14,36 +14,32 @@ var Laracasts = {
 
     getLessonsFromStorage: function () {
 
-        var that = this;
-
         var deferredObject = $.Deferred();
 
-        chrome.storage.sync.get('lessons', function (result) {
+        var lessons = localStorage['lessons'];
 
-            if (result.lessons === undefined) result.lessons = [];
+        if(lessons !== undefined) lessons = JSON.parse(lessons);
 
-            that.lessons = result.lessons;
+        if(lessons === undefined) lessons = [];
 
-            deferredObject.resolve(that);
+        this.lessons = lessons;
 
-        });
+        deferredObject.resolve(this);
 
         return deferredObject.promise();
     },
 
     getLessonsFromStorageAndUpdate: function () {
 
-        var that = this;
+        var lessons = localStorage['lessons'];
 
-        chrome.storage.sync.get('lessons', function (result) {
+        if(lessons !== undefined) lessons = JSON.parse(lessons);
 
-            if (result.lessons === undefined) result.lessons = [];
+        if(lessons === undefined) lessons = [];
 
-            that.lessons = result.lessons;
+        this.lessons = lessons;
 
-            that.fetchFeedFromLaracasts();
-
-        });
+        this.fetchFeedFromLaracasts();
     },
 
     searchForLessonByTitle: function (title) {
@@ -55,9 +51,7 @@ var Laracasts = {
     },
 
     storeLessons: function () {
-        chrome.storage.sync.set({'lessons': this.lessons}, function () {
-            // success
-        });
+        localStorage['lessons'] =  JSON.stringify(this.lessons);
     },
 
     updateBadge: function () {
@@ -65,6 +59,8 @@ var Laracasts = {
         var numberOfUnwatchedLessons = this.lessons.filter(function (lesson) {
             return lesson.watched == false;
         }).length;
+
+        if(numberOfUnwatchedLessons == 0) numberOfUnwatchedLessons = '';
 
         chrome.browserAction.setBadgeText({text: numberOfUnwatchedLessons.toString()});
     },
