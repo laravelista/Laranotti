@@ -189,7 +189,7 @@ var Helper = (function () {
          */
         value: function convertToDate(string) {
             var parts = string.split('.');
-            return new Date(parts[2], parts[1], parts[0]);
+            return new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
         }
     }, {
         key: 'sortLessonsByDate',
