@@ -1,5 +1,7 @@
 # Laracasts Notifier
 
+[![Join the chat at https://gitter.im/laravelista/Laranotti](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/laravelista/Laranotti?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 ![ ](http://img.shields.io/gratipay/mabasic.svg)
 
 Install from [Google Chrome store page](https://chrome.google.com/webstore/detail/laracasts-notifier/aidlbngabkfmnfmfjgnmfhihjcpdbbjo)
