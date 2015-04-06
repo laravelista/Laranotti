@@ -8941,5 +8941,10 @@ body {
 div.navbar-header button {
   color: #bbbbbb;
 }
+a.navbar-brand img {
+  margin-top: -12px;
+  float: left;
+  margin-right: 7px;
+}
 
 /*# sourceMappingURL=app.css.map */

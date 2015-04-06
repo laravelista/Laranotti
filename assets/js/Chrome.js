@@ -46,7 +46,7 @@ class Chrome {
             type: "basic",
             title: title,
             message: message,
-            iconUrl: "laracasts-logo.jpg",
+            iconUrl: "graphics/laranotti-notification-160.png",
             buttons: [
                 {
                     title: 'Watch'
@@ -77,7 +77,7 @@ class Chrome {
             title: title,
             message: message,
             items: items,
-            iconUrl: "laracasts-logo.jpg",
+            iconUrl: "graphics/laranotti-notification-160.png",
             buttons: [
                 {
                     title: 'Mark all Watched'

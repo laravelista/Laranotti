@@ -12,8 +12,8 @@ class Navbar extends React.Component{
                             <span className="sr-only">Toggle navigation</span>
                             <i className="fa fa-fw fa-cogs"></i>
                         </button>
-                        <a target="_blank" className="navbar-brand" href="https://laracasts.com">Laracasts
-                            <i> Notifier</i>
+                        <a target="_blank" className="navbar-brand" href="https://laracasts.com">
+                            <img src="graphics/laranotti-logo-text-white.png" />
                         </a>
                     </div>
                     <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">

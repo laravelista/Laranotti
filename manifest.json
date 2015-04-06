@@ -1,12 +1,12 @@
 {
   "manifest_version": 2,
-  "name": "Laracasts Notifier v2",
-  "description": "This extension notifies you of new lessons from Laracasts, and lets you view the latest.",
+  "name": "Laranotti",
+  "description": "Laranotti notifies you of new lessons from Laracasts, and lets you view the latest.",
   "version": "2.0.0",
   "icons": {
-    "16": "laracasts16.png",
-    "48": "laracasts48.png",
-    "128": "laracasts128.png"
+    "16": "graphics/laranotti-logo-16.png",
+    "48": "graphics/laranotti-logo-48.png",
+    "128": "graphics/laranotti-logo-128.png"
   },
   "permissions": [
     "http://laracasts-feed.mariobasic.com/api/v1/feed/lessons",
@@ -24,7 +24,11 @@
     "persistent": false
   },
   "browser_action": {
-    "default_icon": "laracasts16.png",
+    "default_icon": {
+      "19": "graphics/laranotti-logo-19.png",
+      "38": "graphics/laranotti-logo-38.png"
+    },
+    "default_title": "Laranotti",
     "default_popup": "popup.html"
   }
 }

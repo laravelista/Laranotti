@@ -91,7 +91,7 @@ var Chrome = (function () {
                 type: 'basic',
                 title: title,
                 message: message,
-                iconUrl: 'laracasts-logo.jpg',
+                iconUrl: 'graphics/laranotti-notification-160.png',
                 buttons: [{
                     title: 'Watch'
                 }, {
@@ -119,7 +119,7 @@ var Chrome = (function () {
                 title: title,
                 message: message,
                 items: items,
-                iconUrl: 'laracasts-logo.jpg',
+                iconUrl: 'graphics/laranotti-notification-160.png',
                 buttons: [{
                     title: 'Mark all Watched'
                 }, {
@@ -580,12 +580,7 @@ var Navbar = (function (_React$Component) {
                         _React2["default"].createElement(
                             "a",
                             { target: "_blank", className: "navbar-brand", href: "https://laracasts.com" },
-                            "Laracasts",
-                            _React2["default"].createElement(
-                                "i",
-                                null,
-                                " Notifier"
-                            )
+                            _React2["default"].createElement("img", { src: "graphics/laranotti-logo-text-white.png" })
                         )
                     ),
                     _React2["default"].createElement(
