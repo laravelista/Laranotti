@@ -47,7 +47,7 @@ chrome.notifications.onButtonClicked.addListener(function (notificationId, butto
             //open a tab to watch lesson on laracasts
             laranotti.checkForNewLessons().done(function (Laranotti) {
                 chrome.tabs.create({
-                    url: Laracasts.lessons[parseInt(notificationId)].link
+                    url: Laranotti.lessons[parseInt(notificationId)].link
                 }, function (tab) {
                     // when tab is closed mark lesson as watched
                     chrome.tabs.onRemoved.addListener(function (tabId, removeInfo) {
@@ -68,6 +68,8 @@ chrome.notifications.onButtonClicked.addListener(function (notificationId, butto
                 Laranotti.toggleLessonWatched(notificationId);
 
                 chrome.notifications.clear(notificationId, function (wasCleared) {});
+
+                //TODO: Notify Notifier React.js extension to update state somehow
             });
         }
     }
@@ -83,7 +85,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
             var laranotti = new Laranotti();
 
             laranotti.checkForNewLessons().done(function (Laranotti) {
-                Laranotti.toggleWatched(request.lessonId);
+                Laranotti.toggleLessonWatched(request.lessonId);
 
                 sendResponse();
             });
