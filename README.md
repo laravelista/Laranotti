@@ -1,6 +1,6 @@
 # Laranotti
 
-![ ](http://img.shields.io/gratipay/mabasic.svg)
+![ ](http://img.shields.io/gratipay/mabasic.svg) [![Join the chat at https://gitter.im/laravelista/Laranotti](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/laravelista/Laranotti?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Install from [Google Chrome store page](https://chrome.google.com/webstore/detail/laracasts-notifier/aidlbngabkfmnfmfjgnmfhihjcpdbbjo)
 
@@ -21,10 +21,10 @@ This extension fetches and notifies you of latest lessons from [Laracasts](https
 - Mark all lessons as watched
 - Manually fetch lessons from Laracasts
 - Extension badge notifies the user how many unwatched lessons he has
-- Desktop notifications [**NEW**]
-- Background events [**NEW**]
-- Automatically fetch new lessons from Laracasts [**NEW**]
-- Detects when you have closed the tab of the lesson you were watching and marks it as watched [**NEW**]
+- Desktop notifications
+- Background events
+- Automatically fetch new lessons from Laracasts
+- Detects when you have closed the tab of the lesson you were watching and marks it as watched
 
 ## Screenshots
 
