@@ -4,117 +4,46 @@ import $ from 'jquery';
 import Navbar from './Navbar.js';
 import Lessons from './Lessons.js';
 
-import Storage from '../Storage.js';
-import Helper from '../Helper.js';
-import Chrome from '../Chrome.js';
-
 class Notifier extends React.Component {
 
     state = { lessons: [] };
 
-    checkForNewLessons() {
-        this.fetchFeedFromLaracasts();
-    }
-
     componentDidMount() {
-        this.setState({lessons : Storage.getLessons()});
+        var lessons = this.props.laranotti.lessons;
 
-        this.checkForNewLessons();
-    }
-
-    fetchFeedFromLaracasts() {
-
-        $.ajax({
-            url: this.props.url,
-            dataType: 'json',
-            success: function (data) {
-
-                var feed = Helper.prepareLessons(data);
-                var lessons = this.state.lessons;
-
-                var newLessons = Helper.getNewLessonsByComparison(lessons, feed);
-
-                lessons = Helper.addNewLessonsToLessons(newLessons, lessons);
-
-                lessons = Helper.sortLessonsByDate(lessons);
-
-                this.setState({lessons: lessons});
-
-                Helper.createNotifications(newLessons, lessons);
-
-                this.updateBadge();
-
-                Storage.storeLessons(this.state.lessons);
-
-            }.bind(this),
-            error: function (xhr, status, err) {
-                console.error(this.props.url, status, err.toString());
-            }.bind(this)
-        });
-    }
-
-    refreshFeed(e) {
-        e.preventDefault();
-
-        this.fetchFeedFromLaracasts();
-    }
-
-    updateBadge() {
-
-        // Count number of unwatched lessons from state
-        var numberOfUnwatchedLessons = this.state.lessons.filter(function (lesson) {
-            return lesson.watched == false;
-        }).length;
-
-        Chrome.changeBadgeValue(numberOfUnwatchedLessons.toString());
-    }
-
-    markAllWatched(e) {
-
-        // What does this do???
-        if(e !== undefined) {
-            e.preventDefault();
+        if(lessons != []) {
+            this.setState({lessons: lessons});
         }
 
-        var lessons = this.state.lessons;
+        this._refreshFeed();
+    }
 
-        lessons.forEach(function (lesson) {
-            lesson.watched = true;
+    _refreshFeed() {
+        var that = this;
+        this.props.laranotti.checkForNewLessons().done(function (Laranotti) {
+            that.setState({lessons: that.props.laranotti.lessons});
         });
-
-        this.setState({lessons: lessons});
-
-        this.updateBadge();
-
-        Storage.storeLessons(this.state.lessons);
     }
 
-    toggleWatched(key) {
-        var lessons = this.state.lessons;
+    _markAllWatched() {
+        this.props.laranotti.markAllLessonsWatched();
 
-        lessons[key].watched = lessons[key].watched == false;
-
-        this.setState({lessons: lessons});
-
-        this.updateBadge();
-
-        Storage.storeLessons(this.state.lessons);
+        this.setState({lessons: this.props.laranotti.lessons});
     }
 
-    removeLesson(key) {
+    _toggleWatched(key) {
+        this.props.laranotti.toggleLessonWatched(key);
 
-        var lessons = this.state.lessons;
-
-        lessons.splice(key, 1);
-
-        this.setState({lessons: lessons});
-
-        this.updateBadge();
-
-        Storage.storeLessons(this.state.lessons);
+        this.setState({lessons: this.props.laranotti.lessons});
     }
 
-    watchLesson(key) {
+    _removeLesson(key) {
+        this.props.laranotti.removeLesson(key);
+
+        this.setState({lessons: this.props.laranotti.lessons});
+    }
+
+    _watchLesson(key) {
 
         if (typeof chrome.tabs === 'object') {
 
@@ -138,12 +67,12 @@ class Notifier extends React.Component {
     render() {
         return (
             <div>
-                <Navbar markAllWatched={this.markAllWatched.bind(this)} lessons={this.state.lessons} refreshFeed={this.refreshFeed.bind(this)} />
+                <Navbar markAllWatched={this._markAllWatched.bind(this)} lessons={this.state.lessons} refreshFeed={this._refreshFeed.bind(this)} />
 
                 <div className="container-fluid">
                     <div className="row">
                         <div className="col-md-12">
-                            <Lessons lessons={this.state.lessons} watchLesson={this.watchLesson.bind(this)} toggleWatched={this.toggleWatched.bind(this)} removeLesson={this.removeLesson.bind(this)} />
+                            <Lessons lessons={this.state.lessons} watchLesson={this._watchLesson.bind(this)} toggleWatched={this._toggleWatched.bind(this)} removeLesson={this._removeLesson.bind(this)} />
                         </div>
                     </div>
                 </div>

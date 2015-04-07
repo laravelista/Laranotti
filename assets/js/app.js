@@ -6,12 +6,11 @@ require('bootstrap');
 
 var React = require('react');
 var Notifier = require('./components/Notifier.js');
+var Laranotti = require('./Laranotti.js');
 
-/**
- * PoolInterval is not being used at the moment.
- * I think that there is no use for it now because of background eventPage.
- */
+var laranotti = new Laranotti;
+
 React.render(
-    <Notifier url="http://laracasts-feed.mariobasic.com/api/v1/feed/lessons" pollInterval={2000} />,
+    <Notifier laranotti={laranotti} />,
     document.getElementById('notifier')
 );

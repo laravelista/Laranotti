@@ -17,8 +17,6 @@
   ],
   "background": {
     "scripts": [
-      "public/js/vendor/jquery.js",
-      "public/js/helpers.js",
       "public/js/eventPage.js"
     ],
     "persistent": false

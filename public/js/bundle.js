@@ -10,15 +10,14 @@ require('bootstrap');
 
 var React = require('react');
 var Notifier = require('./components/Notifier.js');
+var Laranotti = require('./Laranotti.js');
 
-/**
- * PoolInterval is not being used at the moment.
- * I think that there is no use for it now because of background eventPage.
- */
-React.render(React.createElement(Notifier, { url: 'http://laracasts-feed.mariobasic.com/api/v1/feed/lessons', pollInterval: 2000 }), document.getElementById('notifier'));
+var laranotti = new Laranotti();
+
+React.render(React.createElement(Notifier, { laranotti: laranotti }), document.getElementById('notifier'));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./components/Notifier.js":8,"bootstrap":9,"jquery":22,"react":178}],2:[function(require,module,exports){
+},{"./Laranotti.js":3,"./components/Notifier.js":8,"bootstrap":9,"jquery":22,"react":178}],2:[function(require,module,exports){
 'use strict';
 
 var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
@@ -173,42 +172,35 @@ var _Chrome = require('./Chrome.js');
 
 var _Chrome2 = _interopRequireWildcard(_Chrome);
 
-var Helper = (function () {
-    function Helper() {
-        _classCallCheck(this, Helper);
+var _Storage = require('./Storage.js');
+
+var _Storage2 = _interopRequireWildcard(_Storage);
+
+var Laranotti = (function () {
+    function Laranotti() {
+        _classCallCheck(this, Laranotti);
+
+        this.lessons = [];
+        this.url = 'http://laracasts-feed.mariobasic.com/api/v1/feed/lessons';
+
+        this.lessons = _Storage2['default'].getLessons();
     }
 
-    _createClass(Helper, null, [{
-        key: 'convertToDate',
-
-        /**
-         * Converts string (14.4.2015) to Date class.
-         *
-         * @param string
-         * @returns {Date}
-         */
-        value: function convertToDate(string) {
-            var parts = string.split('.');
-            return new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
-        }
-    }, {
+    _createClass(Laranotti, [{
         key: 'sortLessonsByDate',
 
         /**
          * Sorts lessons by date descending.
          * From newest to oldest.
          *
-         * @param lessons
          * @returns {*}
          */
-        value: function sortLessonsByDate(lessons) {
-            lessons.sort(function (a, b) {
-                a = Helper.convertToDate(a.date);
-                b = Helper.convertToDate(b.date);
+        value: function sortLessonsByDate() {
+            this.lessons.sort(function (a, b) {
+                a = Laranotti.convertToDate(a.date);
+                b = Laranotti.convertToDate(b.date);
                 return b > a;
             });
-
-            return lessons;
         }
     }, {
         key: 'searchForLessonByTitle',
@@ -217,70 +209,14 @@ var Helper = (function () {
          * Returns the position of lesson if found.
          *
          * @param title
-         * @param lessons
          * @returns {number}
          */
-        value: function searchForLessonByTitle(title, lessons) {
-            for (var i = 0; i < lessons.length; i++) {
-                if (title == lessons[i].title) {
+        value: function searchForLessonByTitle(title) {
+            for (var i = 0; i < this.lessons.length; i++) {
+                if (title == this.lessons[i].title) {
                     return i;
                 }
             }
-        }
-    }, {
-        key: 'prepareLessons',
-
-        /**
-         * Adds watched property and sets it to false by default.
-         *
-         * @param lessons
-         * @returns {*}
-         */
-        value: function prepareLessons(lessons) {
-            return lessons.map(function (lesson) {
-                lesson.watched = false;
-                return lesson;
-            });
-        }
-    }, {
-        key: 'getNewLessonsByComparison',
-
-        /**
-         * It compares lessons with feed and returns
-         * @param lessons
-         * @param feed
-         * @returns {*}
-         */
-        value: function getNewLessonsByComparison(lessons, feed) {
-            return feed.filter(function (item) {
-                for (var i = 0; i < lessons.length; i++) {
-                    if (item.title == lessons[i].title) {
-                        return false;
-                    }
-                }
-
-                // Adds item to the beginning of lessons array
-                //lessons.unshift(item);
-
-                return true;
-            });
-        }
-    }, {
-        key: 'addNewLessonsToLessons',
-
-        /**
-         * Adds new lessons to lessons array and returns it.
-         *
-         * @param newLessons
-         * @param lessons
-         * @returns {*}
-         */
-        value: function addNewLessonsToLessons(newLessons, lessons) {
-            newLessons.forEach(function (lesson) {
-                lessons.unshift(lesson);
-            });
-
-            return lessons;
         }
     }, {
         key: 'createNotifications',
@@ -289,14 +225,13 @@ var Helper = (function () {
          * Creates a notification based on the amount of new lessons.
          *
          * @param newLessons
-         * @param lessons
          */
-        value: function createNotifications(newLessons, lessons) {
+        value: function createNotifications(newLessons) {
 
             // If there is only 1 new lesson, create a basic notification.
             if (newLessons.length == 1) {
 
-                var id = Helper.searchForLessonByTitle(newLessons[0].title, lessons);
+                var id = this.searchForLessonByTitle(newLessons[0].title);
 
                 _Chrome2['default'].createBasicNotificationForLesson(id.toString(), newLessons[0].title, newLessons[0].summary);
             }
@@ -313,15 +248,138 @@ var Helper = (function () {
                 _Chrome2['default'].createListNotificationForLessons(newLessons.length.toString() + ' New Lessons on Laracasts.', 'You have ' + newLessons.length.toString() + 'lessons unwatched.', items);
             }
         }
+    }, {
+        key: 'addNewLessons',
+        value: function addNewLessons(data) {
+            var feed = Laranotti.prepareLessons(data);
+
+            var newLessons = feed.filter(function (item) {
+                for (var i = 0; i < this.lessons.length; i++) {
+                    if (item.title == this.lessons[i].title) {
+                        return false;
+                    }
+                }
+
+                // Adds item to the beginning of lessons array
+                this.lessons.unshift(item);
+
+                return true;
+            }, this);
+
+            this.sortLessonsByDate();
+
+            this.storeLessonsInStorage();
+
+            return newLessons;
+        }
+    }, {
+        key: 'checkForNewLessons',
+        value: function checkForNewLessons() {
+
+            var deferredObject = _$2['default'].Deferred();
+
+            _$2['default'].ajax({
+                url: this.url,
+                dataType: 'json',
+                success: (function (data) {
+
+                    var newLessons = this.addNewLessons(data);
+
+                    this.createNotifications(newLessons);
+
+                    this.updateBadge();
+
+                    deferredObject.resolve(this);
+                }).bind(this),
+                error: (function (xhr, status, err) {
+                    console.error(this.props.url, status, err.toString());
+
+                    deferredObject.resolve(this);
+                }).bind(this)
+            });
+
+            return deferredObject.promise();
+        }
+    }, {
+        key: 'updateBadge',
+        value: function updateBadge() {
+            var numberOfUnwatchedLessons = this.lessons.filter(function (lesson) {
+                return lesson.watched == false;
+            }).length;
+
+            _Chrome2['default'].changeBadgeValue(numberOfUnwatchedLessons.toString());
+        }
+    }, {
+        key: 'markAllLessonsWatched',
+        value: function markAllLessonsWatched() {
+            this.lessons.forEach(function (lesson) {
+                lesson.watched = true;
+            });
+
+            this.storeLessonsInStorage();
+
+            this.updateBadge();
+        }
+    }, {
+        key: 'toggleLessonWatched',
+        value: function toggleLessonWatched(key) {
+            this.lessons[key].watched = this.lessons[key].watched == false;
+
+            this.storeLessonsInStorage();
+
+            this.updateBadge();
+        }
+    }, {
+        key: 'removeLesson',
+        value: function removeLesson(key) {
+            this.lessons.splice(key, 1);
+
+            this.storeLessonsInStorage();
+
+            this.updateBadge();
+        }
+    }, {
+        key: 'storeLessonsInStorage',
+        value: function storeLessonsInStorage() {
+            _Storage2['default'].storeLessons(this.lessons);
+        }
+    }], [{
+        key: 'prepareLessons',
+
+        /**
+         * Adds watched property and sets it to false by default.
+         *
+         * @param lessons
+         * @returns {*}
+         */
+        value: function prepareLessons(lessons) {
+            return lessons.map(function (lesson) {
+                lesson.watched = false;
+                return lesson;
+            });
+        }
+    }, {
+        key: 'convertToDate',
+
+        /**
+         * Converts string (14.4.2015) to Date class.
+         *
+         * @param string
+         * @returns {Date}
+         */
+        value: function convertToDate(string) {
+            var parts = string.split('.');
+            return new Date(parseInt(parts[2]), parseInt(parts[1]) - 1, parseInt(parts[0]));
+        }
     }]);
 
-    return Helper;
+    return Laranotti;
 })();
 
-exports['default'] = Helper;
+exports['default'] = Laranotti;
 module.exports = exports['default'];
 
-},{"./Chrome.js":2,"jquery":22}],4:[function(require,module,exports){
+},{"./Chrome.js":2,"./Storage.js":4,"jquery":22}],4:[function(require,module,exports){
 'use strict';
 
 var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
@@ -708,18 +766,6 @@ var _Lessons = require('./Lessons.js');
 
 var _Lessons2 = _interopRequireWildcard(_Lessons);
 
-var _Storage = require('../Storage.js');
-
-var _Storage2 = _interopRequireWildcard(_Storage);
-
-var _Helper = require('../Helper.js');
-
-var _Helper2 = _interopRequireWildcard(_Helper);
-
-var _Chrome = require('../Chrome.js');
-
-var _Chrome2 = _interopRequireWildcard(_Chrome);
-
 var Notifier = (function (_React$Component) {
     function Notifier() {
         _classCallCheck(this, Notifier);
@@ -734,117 +780,48 @@ var Notifier = (function (_React$Component) {
     _inherits(Notifier, _React$Component);
 
     _createClass(Notifier, [{
-        key: 'checkForNewLessons',
-        value: function checkForNewLessons() {
-            this.fetchFeedFromLaracasts();
-        }
-    }, {
         key: 'componentDidMount',
         value: function componentDidMount() {
-            this.setState({ lessons: _Storage2['default'].getLessons() });
+            var lessons = this.props.laranotti.lessons;
 
-            this.checkForNewLessons();
-        }
-    }, {
-        key: 'fetchFeedFromLaracasts',
-        value: function fetchFeedFromLaracasts() {
-
-            _$2['default'].ajax({
-                url: this.props.url,
-                dataType: 'json',
-                success: (function (data) {
-
-                    var feed = _Helper2['default'].prepareLessons(data);
-                    var lessons = this.state.lessons;
-
-                    var newLessons = _Helper2['default'].getNewLessonsByComparison(lessons, feed);
-
-                    lessons = _Helper2['default'].addNewLessonsToLessons(newLessons, lessons);
-
-                    lessons = _Helper2['default'].sortLessonsByDate(lessons);
-
-                    this.setState({ lessons: lessons });
-
-                    _Helper2['default'].createNotifications(newLessons, lessons);
-
-                    this.updateBadge();
-
-                    _Storage2['default'].storeLessons(this.state.lessons);
-                }).bind(this),
-                error: (function (xhr, status, err) {
-                    console.error(this.props.url, status, err.toString());
-                }).bind(this)
-            });
-        }
-    }, {
-        key: 'refreshFeed',
-        value: function refreshFeed(e) {
-            e.preventDefault();
-
-            this.fetchFeedFromLaracasts();
-        }
-    }, {
-        key: 'updateBadge',
-        value: function updateBadge() {
-
-            // Count number of unwatched lessons from state
-            var numberOfUnwatchedLessons = this.state.lessons.filter(function (lesson) {
-                return lesson.watched == false;
-            }).length;
-
-            _Chrome2['default'].changeBadgeValue(numberOfUnwatchedLessons.toString());
-        }
-    }, {
-        key: 'markAllWatched',
-        value: function markAllWatched(e) {
-
-            // What does this do???
-            if (e !== undefined) {
-                e.preventDefault();
+            if (lessons != []) {
+                this.setState({ lessons: lessons });
             }
 
-            var lessons = this.state.lessons;
-
-            lessons.forEach(function (lesson) {
-                lesson.watched = true;
+            this._refreshFeed();
+        }
+    }, {
+        key: '_refreshFeed',
+        value: function _refreshFeed() {
+            var that = this;
+            this.props.laranotti.checkForNewLessons().done(function (Laranotti) {
+                that.setState({ lessons: that.props.laranotti.lessons });
             });
-
-            this.setState({ lessons: lessons });
-
-            this.updateBadge();
-
-            _Storage2['default'].storeLessons(this.state.lessons);
         }
     }, {
-        key: 'toggleWatched',
-        value: function toggleWatched(key) {
-            var lessons = this.state.lessons;
+        key: '_markAllWatched',
+        value: function _markAllWatched() {
+            this.props.laranotti.markAllLessonsWatched();
 
-            lessons[key].watched = lessons[key].watched == false;
-
-            this.setState({ lessons: lessons });
-
-            this.updateBadge();
-
-            _Storage2['default'].storeLessons(this.state.lessons);
+            this.setState({ lessons: this.props.laranotti.lessons });
         }
     }, {
-        key: 'removeLesson',
-        value: function removeLesson(key) {
+        key: '_toggleWatched',
+        value: function _toggleWatched(key) {
+            this.props.laranotti.toggleLessonWatched(key);
 
-            var lessons = this.state.lessons;
-
-            lessons.splice(key, 1);
-
-            this.setState({ lessons: lessons });
-
-            this.updateBadge();
-
-            _Storage2['default'].storeLessons(this.state.lessons);
+            this.setState({ lessons: this.props.laranotti.lessons });
         }
     }, {
-        key: 'watchLesson',
-        value: function watchLesson(key) {
+        key: '_removeLesson',
+        value: function _removeLesson(key) {
+            this.props.laranotti.removeLesson(key);
+
+            this.setState({ lessons: this.props.laranotti.lessons });
+        }
+    }, {
+        key: '_watchLesson',
+        value: function _watchLesson(key) {
 
             if (typeof chrome.tabs === 'object') {
 
@@ -862,7 +839,7 @@ var Notifier = (function (_React$Component) {
             return _React2['default'].createElement(
                 'div',
                 null,
-                _React2['default'].createElement(_Navbar2['default'], { markAllWatched: this.markAllWatched.bind(this), lessons: this.state.lessons, refreshFeed: this.refreshFeed.bind(this) }),
+                _React2['default'].createElement(_Navbar2['default'], { markAllWatched: this._markAllWatched.bind(this), lessons: this.state.lessons, refreshFeed: this._refreshFeed.bind(this) }),
                 _React2['default'].createElement(
                     'div',
                     { className: 'container-fluid' },
@@ -872,7 +849,7 @@ var Notifier = (function (_React$Component) {
                         _React2['default'].createElement(
                             'div',
                             { className: 'col-md-12' },
-                            _React2['default'].createElement(_Lessons2['default'], { lessons: this.state.lessons, watchLesson: this.watchLesson.bind(this), toggleWatched: this.toggleWatched.bind(this), removeLesson: this.removeLesson.bind(this) })
+                            _React2['default'].createElement(_Lessons2['default'], { lessons: this.state.lessons, watchLesson: this._watchLesson.bind(this), toggleWatched: this._toggleWatched.bind(this), removeLesson: this._removeLesson.bind(this) })
                         )
                     )
                 )
@@ -891,7 +868,7 @@ module.exports = exports['default'];
 // or even better fetch feed ???
 // TODO: this is unnecessary maybe ?
 
-},{"../Chrome.js":2,"../Helper.js":3,"../Storage.js":4,"./Lessons.js":6,"./Navbar.js":7,"jquery":22,"react":178}],9:[function(require,module,exports){
+},{"./Lessons.js":6,"./Navbar.js":7,"jquery":22,"react":178}],9:[function(require,module,exports){
 // This file is autogenerated via the `commonjs` Grunt task. You can require() this file in a CommonJS environment.
 require('../../js/transition.js')
 require('../../js/alert.js')

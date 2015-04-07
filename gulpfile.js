@@ -20,4 +20,5 @@ elixir(function (mix) {
     mix.copy('vendor/bower_components/font-awesome/fonts', 'public/fonts');
     mix.less('app.less');
     mix.browserify('app.js', null, 'assets/js');
+    //mix.browserify('events.js', 'public/js/eventPage.js', 'assets/js');
 });
