@@ -27,11 +27,8 @@ chrome.notifications.onButtonClicked.addListener(function (notificationId, butto
 
     if (notificationId == 'list') {
         if (buttonIndex == 0) {
-
-            laranotti.checkForNewLessons().done(function (Laranotti) {
-                //TODO: Fix this to only mark new lessons watched
-                Laranotti.markAllLessonsWatched();
-            });
+            //TODO: Fix this to only mark new lessons watched
+            laranotti.markAllLessonsWatched();
 
             chrome.notifications.clear(notificationId, function (wasCleared) { });
         }
@@ -39,38 +36,34 @@ chrome.notifications.onButtonClicked.addListener(function (notificationId, butto
             chrome.tabs.create({
                 url: "https://laracasts.com/lessons"
             });
+
             chrome.notifications.clear(notificationId, function (wasCleared) { });
         }
     }
     else {
         if (buttonIndex == 0) {
             //open a tab to watch lesson on laracasts
-            laranotti.checkForNewLessons().done(function (Laranotti) {
-                chrome.tabs.create({
-                    url: Laranotti.lessons[parseInt(notificationId)].link
-                }, function (tab) {
-                    // when tab is closed mark lesson as watched
-                    chrome.tabs.onRemoved.addListener(function (tabId, removeInfo) {
-                        // If the tab closed is the tab with  the lesson opened
-                        if (tab.id == tabId) {
-                            laranotti.checkForNewLessons().done(function (Laranotti) {
-                                Laranotti.toggleLessonWatched(notificationId);
-                            });
-                        }
-                    });
+            chrome.tabs.create({
+                url: laranotti.lessons[parseInt(notificationId)].link
+            }, function (tab) {
+                // when tab is closed mark lesson as watched
+                chrome.tabs.onRemoved.addListener(function (tabId, removeInfo) {
+                    // If the tab closed is the tab with  the lesson opened
+                    if (tab.id == tabId) {
+                        laranotti.toggleLessonWatched(notificationId);
+                    }
                 });
-
-                chrome.notifications.clear(notificationId, function (wasCleared) { });
             });
+
+            chrome.notifications.clear(notificationId, function (wasCleared) { });
+
         }
         if (buttonIndex == 1) {
-            laranotti.checkForNewLessons().done(function (Laranotti) {
-                Laranotti.toggleLessonWatched(notificationId);
+            laranotti.toggleLessonWatched(notificationId);
 
-                chrome.notifications.clear(notificationId, function (wasCleared) { });
+            chrome.notifications.clear(notificationId, function (wasCleared) { });
 
-                //TODO: Notify Notifier React.js extension to update state somehow
-            });
+            //TODO: Notify Notifier React.js extension to update state somehow
         }
     }
 
@@ -85,11 +78,9 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
             var laranotti = new Laranotti;
 
-            laranotti.checkForNewLessons().done(function (Laranotti) {
-                Laranotti.toggleLessonWatched(request.lessonId);
+            laranotti.toggleLessonWatched(request.lessonId);
 
-                sendResponse();
-            });
+            sendResponse();
         }
     });
 

@@ -135,7 +135,7 @@ class Laranotti {
 
             }.bind(this),
             error: function (xhr, status, err) {
-                console.error(this.props.url, status, err.toString());
+                console.error(this.url, status, err.toString());
 
                 deferredObject.resolve(this);
             }.bind(this)
