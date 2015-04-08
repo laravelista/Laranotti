@@ -199,7 +199,7 @@ var Laranotti = (function () {
             this.lessons.sort(function (a, b) {
                 a = Laranotti.convertToDate(a.date);
                 b = Laranotti.convertToDate(b.date);
-                return b > a;
+                return b - a;
             });
         }
     }, {
