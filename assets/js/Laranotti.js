@@ -9,6 +9,10 @@ class Laranotti {
     url = "http://laracasts-feed.mariobasic.com/api/v1/feed/lessons";
 
     constructor() {
+        this.getLessonsFromStorage();
+    }
+
+    getLessonsFromStorage() {
         this.lessons = Storage.getLessons();
     }
 
@@ -21,6 +25,7 @@ class Laranotti {
     static prepareLessons(lessons) {
         return lessons.map(lesson => {
             lesson['watched'] = false;
+            lesson['new'] = true;
             return lesson;
         });
     }
@@ -165,6 +170,20 @@ class Laranotti {
     markAllLessonsWatched() {
         this.lessons.forEach(lesson => {
             lesson.watched = true;
+            lesson.new = false;
+        });
+
+        this.storeLessonsInStorage();
+
+        this.updateBadge();
+    }
+
+    markNewLessonsWatched() {
+        this.lessons.forEach(lesson => {
+            if(lesson.new == true) {
+                lesson.new = false;
+                lesson.watched = true;
+            }
         });
 
         this.storeLessonsInStorage();

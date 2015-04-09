@@ -16,12 +16,32 @@ class Notifier extends React.Component {
         }
 
         this._refreshFeed();
+
+        this.attachListeners();
+    }
+
+    /**
+     * Add listeners to this method.
+     * When the component mounts the listeners
+     * are attached.
+     */
+    attachListeners() {
+        chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+            if(request.action == 'updateState'){
+                this.fetchLessonsFromStorage();
+            }
+        });
+    }
+
+    fetchLessonsFromStorage() {
+        this.props.laranotti.getLessonsFromStorage();
+
+        this.setState({lessons: this.props.laranotti.lessons});
     }
 
     _refreshFeed() {
-        var that = this;
         this.props.laranotti.checkForNewLessons().done(Laranotti => {
-            that.setState({lessons: that.props.laranotti.lessons});
+            this.setState({lessons: this.props.laranotti.lessons});
         });
     }
 
@@ -51,11 +71,10 @@ class Notifier extends React.Component {
                 url: this.state.lessons[key].link
             }, tab => {
 
-                chrome.runtime.sendMessage({tabId: tab.id, lessonId: key}, response => {
-                    //console.log(response.farewell);
-                    //that.toggleWatched(key);
-                    // or even better fetch feed ???
-                    // TODO: this is unnecessary maybe ?
+                chrome.runtime.sendMessage({
+                    action: 'detectLessonTabClosed',
+                    tabId: tab.id,
+                    lessonId: key
                 });
 
             });

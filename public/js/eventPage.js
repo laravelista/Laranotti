@@ -96,10 +96,12 @@ chrome.notifications.onButtonClicked.addListener(function (notificationId, butto
 
         if (markAllWatchedButtonClicked(buttonIndex)) {
 
-            //TODO: Fix this to only mark new lessons watched
-            laranotti.markAllLessonsWatched();
+            laranotti.markNewLessonsWatched();
 
             chrome.notifications.clear(notificationId, function () {});
+
+            //Notify Notifier React.js extension to update state
+            chrome.runtime.sendMessage({ action: 'updateState' });
         }
 
         if (viewOnLaracastsButtonClicked(buttonIndex)) {
@@ -136,25 +138,25 @@ chrome.notifications.onButtonClicked.addListener(function (notificationId, butto
 
             chrome.notifications.clear(notificationId, function () {});
 
-            //TODO: Notify Notifier React.js extension to update state somehow
+            //Notify Notifier React.js extension to update state
+            chrome.runtime.sendMessage({ action: 'updateState' });
         }
     }
 });
 
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
-    // when tab is closed mark lesson as watched
-    chrome.tabs.onRemoved.addListener(function (tabId, removeInfo) {
-        // If the tab closed is the tab with  the lesson opened
-        if (request.tabId == tabId) {
+    if (request.action == 'detectLessonTabClosed') {
+        chrome.tabs.onRemoved.addListener(function (tabId, removeInfo) {
+            // If the tab closed is the tab with  the lesson opened
+            if (request.tabId == tabId) {
 
-            var laranotti = new Laranotti();
+                var laranotti = new Laranotti();
 
-            laranotti.toggleLessonWatched(request.lessonId);
-
-            sendResponse();
-        }
-    });
+                laranotti.toggleLessonWatched(request.lessonId);
+            }
+        });
+    }
 });
 
 },{"./Laranotti.js":3}],2:[function(require,module,exports){
@@ -323,10 +325,15 @@ var Laranotti = (function () {
         this.lessons = [];
         this.url = 'http://laracasts-feed.mariobasic.com/api/v1/feed/lessons';
 
-        this.lessons = _Storage2['default'].getLessons();
+        this.getLessonsFromStorage();
     }
 
     _createClass(Laranotti, [{
+        key: 'getLessonsFromStorage',
+        value: function getLessonsFromStorage() {
+            this.lessons = _Storage2['default'].getLessons();
+        }
+    }, {
         key: 'sortLessonsByDate',
 
         /**
@@ -458,6 +465,21 @@ var Laranotti = (function () {
         value: function markAllLessonsWatched() {
             this.lessons.forEach(function (lesson) {
                 lesson.watched = true;
+                lesson['new'] = false;
+            });
+
+            this.storeLessonsInStorage();
+
+            this.updateBadge();
+        }
+    }, {
+        key: 'markNewLessonsWatched',
+        value: function markNewLessonsWatched() {
+            this.lessons.forEach(function (lesson) {
+                if (lesson['new'] == true) {
+                    lesson['new'] = false;
+                    lesson.watched = true;
+                }
             });
 
             this.storeLessonsInStorage();
@@ -499,6 +521,7 @@ var Laranotti = (function () {
         value: function prepareLessons(lessons) {
             return lessons.map(function (lesson) {
                 lesson.watched = false;
+                lesson['new'] = true;
                 return lesson;
             });
         }
