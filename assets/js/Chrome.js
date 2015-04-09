@@ -55,8 +55,7 @@ class Chrome {
                     title: 'Mark as Watched'
                 }
             ]
-        }, function () {
-        });
+        }, function () {});
 
     }
 
@@ -86,8 +85,7 @@ class Chrome {
                     title: 'View on Laracasts'
                 }
             ]
-        }, function () {
-        });
+        }, function () {});
 
     }
 

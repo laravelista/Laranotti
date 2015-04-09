@@ -1,14 +1,79 @@
 var Laranotti = require('./Laranotti.js');
 
+/**
+ * Whenever an alarms sets off, this function
+ * gets called to detect the alarm name and
+ * do appropriate action.
+ *
+ * @param alarm
+ */
 function resolveAlarm(alarm) {
     // |alarm| can be undefined because onAlarm also gets called from
     // window.setTimeout on old chrome versions.
-    if (alarm && alarm.name == 'pollInterval') {
-        // This also fetches new lessons from Laracasts
+    if (alarm && alarm.name == 'refreshFeedFromLaracasts') {
 
         var laranotti = new Laranotti;
+
         laranotti.checkForNewLessons();
     }
+}
+
+/**
+ * Detect if `mark all watched`
+ * button is clicked.
+ * (List notification only)
+ *
+ * @param buttonIndex
+ * @returns {boolean}
+ */
+function markAllWatchedButtonClicked(buttonIndex) {
+    return buttonIndex == 0;
+}
+
+/**
+ * Detect if `view on laracasts`
+ * button is clicked.
+ * (List notification only)
+ *
+ * @param buttonIndex
+ * @returns {boolean}
+ */
+function viewOnLaracastsButtonClicked(buttonIndex) {
+    return buttonIndex == 1;
+}
+
+/**
+ * Detect if notification is list.
+ *
+ * @param notificationId
+ * @returns {boolean}
+ */
+function notificationIsList(notificationId) {
+    return notificationId == 'list';
+}
+
+/**
+ * Detect if `watch lesson`
+ * button is clicked
+ * (Basic notification only)
+ *
+ * @param buttonIndex
+ * @returns {boolean}
+ */
+function watchLessonButtonClicked(buttonIndex) {
+    return buttonIndex == 0;
+}
+
+/**
+ * Detect if `mark as watched`
+ * button is clicked.
+ * (Basic notification only)
+ *
+ * @param buttonIndex
+ * @returns {boolean}
+ */
+function markAsWatchedButtonClicked(buttonIndex) {
+    return buttonIndex == 1;
 }
 
 
@@ -19,35 +84,43 @@ function resolveAlarm(alarm) {
 chrome.alarms.onAlarm.addListener(resolveAlarm);
 
 // Create a new alarm for fetching feed from Laracasts
-chrome.alarms.create('pollInterval', {periodInMinutes: 60});
+chrome.alarms.create('refreshFeedFromLaracasts', {periodInMinutes: 60});
 
 
-chrome.notifications.onButtonClicked.addListener(function (notificationId, buttonIndex) {
+chrome.notifications.onButtonClicked.addListener((notificationId, buttonIndex) => {
+
     var laranotti = new Laranotti;
 
-    if (notificationId == 'list') {
-        if (buttonIndex == 0) {
+    if(notificationIsList(notificationId)) {
+
+        if(markAllWatchedButtonClicked(buttonIndex)) {
+
             //TODO: Fix this to only mark new lessons watched
             laranotti.markAllLessonsWatched();
 
-            chrome.notifications.clear(notificationId, function (wasCleared) { });
+            chrome.notifications.clear(notificationId, function () {});
         }
-        if (buttonIndex == 1) {
+
+        if(viewOnLaracastsButtonClicked(buttonIndex)) {
+
             chrome.tabs.create({
                 url: "https://laracasts.com/lessons"
             });
 
-            chrome.notifications.clear(notificationId, function (wasCleared) { });
+            chrome.notifications.clear(notificationId, function () {});
         }
+
     }
     else {
-        if (buttonIndex == 0) {
+
+        if(watchLessonButtonClicked(buttonIndex)) {
+
             //open a tab to watch lesson on laracasts
             chrome.tabs.create({
                 url: laranotti.lessons[parseInt(notificationId)].link
-            }, function (tab) {
+            }, tab => {
                 // when tab is closed mark lesson as watched
-                chrome.tabs.onRemoved.addListener(function (tabId, removeInfo) {
+                chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
                     // If the tab closed is the tab with  the lesson opened
                     if (tab.id == tabId) {
                         laranotti.toggleLessonWatched(notificationId);
@@ -55,24 +128,26 @@ chrome.notifications.onButtonClicked.addListener(function (notificationId, butto
                 });
             });
 
-            chrome.notifications.clear(notificationId, function (wasCleared) { });
-
+            chrome.notifications.clear(notificationId, function () {});
         }
-        if (buttonIndex == 1) {
+
+        if(markAsWatchedButtonClicked(buttonIndex)) {
+
             laranotti.toggleLessonWatched(notificationId);
 
-            chrome.notifications.clear(notificationId, function (wasCleared) { });
+            chrome.notifications.clear(notificationId, function () {});
 
             //TODO: Notify Notifier React.js extension to update state somehow
         }
+
     }
 
 });
 
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
     // when tab is closed mark lesson as watched
-    chrome.tabs.onRemoved.addListener(function (tabId, removeInfo) {
+    chrome.tabs.onRemoved.addListener((tabId, removeInfo) => {
         // If the tab closed is the tab with  the lesson opened
         if (request.tabId == tabId) {
 

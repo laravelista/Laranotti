@@ -20,7 +20,7 @@ class Notifier extends React.Component {
 
     _refreshFeed() {
         var that = this;
-        this.props.laranotti.checkForNewLessons().done(function (Laranotti) {
+        this.props.laranotti.checkForNewLessons().done(Laranotti => {
             that.setState({lessons: that.props.laranotti.lessons});
         });
     }
@@ -49,9 +49,9 @@ class Notifier extends React.Component {
 
             chrome.tabs.create({
                 url: this.state.lessons[key].link
-            }, function (tab) {
+            }, tab => {
 
-                chrome.runtime.sendMessage({tabId: tab.id, lessonId: key}, function(response) {
+                chrome.runtime.sendMessage({tabId: tab.id, lessonId: key}, response => {
                     //console.log(response.farewell);
                     //that.toggleWatched(key);
                     // or even better fetch feed ???

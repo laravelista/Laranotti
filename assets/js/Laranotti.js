@@ -19,7 +19,7 @@ class Laranotti {
      * @returns {*}
      */
     static prepareLessons(lessons) {
-        return lessons.map(function (lesson) {
+        return lessons.map(lesson => {
             lesson['watched'] = false;
             return lesson;
         });
@@ -43,7 +43,7 @@ class Laranotti {
      * @returns {*}
      */
     sortLessonsByDate() {
-        this.lessons.sort(function (a, b) {
+        this.lessons.sort((a, b) => {
             a = Laranotti.convertToDate(a.date);
             b = Laranotti.convertToDate(b.date);
             return b - a;
@@ -76,7 +76,11 @@ class Laranotti {
 
             var id = this.searchForLessonByTitle(newLessons[0].title);
 
-            Chrome.createBasicNotificationForLesson(id.toString(), newLessons[0].title, newLessons[0].summary);
+            Chrome.createBasicNotificationForLesson(
+                id.toString(),
+                newLessons[0].title,
+                newLessons[0].summary
+            );
         }
 
         // If there are more than 1 new lessons, create a list notification.
@@ -84,11 +88,15 @@ class Laranotti {
 
             var items = [];
 
-            newLessons.forEach(function (lesson) {
+            newLessons.forEach(lesson => {
                 items.push({title: lesson.title, message: lesson.summary});
             });
 
-            Chrome.createListNotificationForLessons(newLessons.length.toString() + ' New Lessons on Laracasts.', 'You have ' + newLessons.length.toString() + 'lessons unwatched.', items);
+            Chrome.createListNotificationForLessons(
+                newLessons.length.toString() + ' New Lessons on Laracasts.',
+                'You have ' + newLessons.length.toString() + 'lessons unwatched.',
+                items
+            );
         }
 
     }
@@ -96,7 +104,7 @@ class Laranotti {
     addNewLessons(data) {
         var feed = Laranotti.prepareLessons(data);
 
-        var newLessons = feed.filter(function (item) {
+        var newLessons = feed.filter(item => {
             for (var i = 0; i < this.lessons.length; i++) {
                 if (item.title == this.lessons[i].title) {
                     return false;
@@ -123,7 +131,7 @@ class Laranotti {
         $.ajax({
             url: this.url,
             dataType: 'json',
-            success: function (data) {
+            success: (data) =>  {
 
                 var newLessons = this.addNewLessons(data);
 
@@ -133,19 +141,21 @@ class Laranotti {
 
                 deferredObject.resolve(this);
 
-            }.bind(this),
-            error: function (xhr, status, err) {
+            },
+            error: (xhr, status, err) => {
+
                 console.error(this.url, status, err.toString());
 
                 deferredObject.resolve(this);
-            }.bind(this)
+
+            }
         });
 
         return deferredObject.promise();
     }
 
     updateBadge() {
-        var numberOfUnwatchedLessons = this.lessons.filter(function (lesson) {
+        var numberOfUnwatchedLessons = this.lessons.filter(lesson => {
             return lesson.watched == false;
         }).length;
 
@@ -153,7 +163,7 @@ class Laranotti {
     }
 
     markAllLessonsWatched() {
-        this.lessons.forEach(function (lesson) {
+        this.lessons.forEach(lesson => {
             lesson.watched = true;
         });
 

@@ -251,17 +251,19 @@ var Laranotti = (function () {
     }, {
         key: 'addNewLessons',
         value: function addNewLessons(data) {
+            var _this = this;
+
             var feed = Laranotti.prepareLessons(data);
 
             var newLessons = feed.filter(function (item) {
-                for (var i = 0; i < this.lessons.length; i++) {
-                    if (item.title == this.lessons[i].title) {
+                for (var i = 0; i < _this.lessons.length; i++) {
+                    if (item.title == _this.lessons[i].title) {
                         return false;
                     }
                 }
 
                 // Adds item to the beginning of lessons array
-                this.lessons.unshift(item);
+                _this.lessons.unshift(item);
 
                 return true;
             }, this);
@@ -275,27 +277,29 @@ var Laranotti = (function () {
     }, {
         key: 'checkForNewLessons',
         value: function checkForNewLessons() {
+            var _this2 = this;
 
             var deferredObject = _$2['default'].Deferred();
 
             _$2['default'].ajax({
                 url: this.url,
                 dataType: 'json',
-                success: (function (data) {
+                success: function success(data) {
 
-                    var newLessons = this.addNewLessons(data);
+                    var newLessons = _this2.addNewLessons(data);
 
-                    this.createNotifications(newLessons);
+                    _this2.createNotifications(newLessons);
 
-                    this.updateBadge();
+                    _this2.updateBadge();
 
-                    deferredObject.resolve(this);
-                }).bind(this),
-                error: (function (xhr, status, err) {
-                    console.error(this.props.url, status, err.toString());
+                    deferredObject.resolve(_this2);
+                },
+                error: function error(xhr, status, err) {
 
-                    deferredObject.resolve(this);
-                }).bind(this)
+                    console.error(_this2.url, status, err.toString());
+
+                    deferredObject.resolve(_this2);
+                }
             });
 
             return deferredObject.promise();
@@ -561,11 +565,12 @@ var Lessons = (function (_React$Component) {
     _createClass(Lessons, [{
         key: 'render',
         value: function render() {
+            var _this = this;
 
             var that = this;
 
             var lessonNodes = this.props.lessons.map(function (lesson, key) {
-                return _React2['default'].createElement(_Lesson2['default'], { key: key, item: lesson, watchLesson: that.props.watchLesson.bind(this, key), removeLesson: that.props.removeLesson.bind(this, key), watched: lesson.watched, toggleWatched: that.props.toggleWatched.bind(this, key), date: lesson.date, heading: lesson.title, text: lesson.summary, href: lesson.link });
+                return _React2['default'].createElement(_Lesson2['default'], { key: key, item: lesson, watchLesson: that.props.watchLesson.bind(_this, key), removeLesson: that.props.removeLesson.bind(_this, key), watched: lesson.watched, toggleWatched: that.props.toggleWatched.bind(_this, key), date: lesson.date, heading: lesson.title, text: lesson.summary, href: lesson.link });
             });
 
             return _React2['default'].createElement(

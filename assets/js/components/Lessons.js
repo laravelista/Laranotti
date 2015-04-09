@@ -8,7 +8,7 @@ class Lessons extends React.Component {
 
         var that = this;
 
-        var lessonNodes = this.props.lessons.map(function (lesson, key) {
+        var lessonNodes = this.props.lessons.map((lesson, key) => {
             return (
                 <Lesson key={key} item={lesson} watchLesson={that.props.watchLesson.bind(this, key)} removeLesson={that.props.removeLesson.bind(this, key)} watched={lesson.watched} toggleWatched={that.props.toggleWatched.bind(this, key)} date={lesson.date} heading={lesson.title} text={lesson.summary} href={lesson.link} />
             );
