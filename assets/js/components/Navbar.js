@@ -37,12 +37,12 @@ class Navbar extends React.Component{
                                 </a>
                                 <ul className="dropdown-menu" role="menu">
                                     <li>
-                                        <a target="_blank" href="https://github.com/mabasic/laracasts-chrome-extension/issues">
+                                        <a target="_blank" href="https://github.com/laravelista/Laranotti/issues">
                                             <i className="fa fa-fw fa-bug"></i>
                                             Report an Issue</a>
                                     </li>
                                     <li>
-                                        <a target="_blank" href="https://github.com/mabasic/laracasts-chrome-extension">
+                                        <a target="_blank" href="https://github.com/laravelista/Laranotti">
                                             <i className="fa fa-fw fa-github"></i>
                                             View on GitHub</a>
                                     </li>
@@ -54,7 +54,7 @@ class Navbar extends React.Component{
                                     </li>
 
                                     <li>
-                                        <a target="_blank" href="http://mariobasic.com">
+                                        <a target="_blank" href="http://laravelista.com">
                                             <i className="fa fa-fw fa-heart-o"></i>
                                             Developer Blog</a>
                                     </li>

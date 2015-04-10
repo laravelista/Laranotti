@@ -787,7 +787,7 @@ var Navbar = (function (_React$Component) {
                                         null,
                                         _React2["default"].createElement(
                                             "a",
-                                            { target: "_blank", href: "https://github.com/mabasic/laracasts-chrome-extension/issues" },
+                                            { target: "_blank", href: "https://github.com/laravelista/Laranotti/issues" },
                                             _React2["default"].createElement("i", { className: "fa fa-fw fa-bug" }),
                                             "Report an Issue"
                                         )
@@ -797,7 +797,7 @@ var Navbar = (function (_React$Component) {
                                         null,
                                         _React2["default"].createElement(
                                             "a",
-                                            { target: "_blank", href: "https://github.com/mabasic/laracasts-chrome-extension" },
+                                            { target: "_blank", href: "https://github.com/laravelista/Laranotti" },
                                             _React2["default"].createElement("i", { className: "fa fa-fw fa-github" }),
                                             "View on GitHub"
                                         )
@@ -817,7 +817,7 @@ var Navbar = (function (_React$Component) {
                                         null,
                                         _React2["default"].createElement(
                                             "a",
-                                            { target: "_blank", href: "http://mariobasic.com" },
+                                            { target: "_blank", href: "http://laravelista.com" },
                                             _React2["default"].createElement("i", { className: "fa fa-fw fa-heart-o" }),
                                             "Developer Blog"
                                         )
