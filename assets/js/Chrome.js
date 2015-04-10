@@ -17,6 +17,20 @@ class Chrome {
     }
 
     /**
+     * Checks if the browser supports google chrome tabs API.
+     *
+     * @returns {boolean}
+     */
+    static supportsChromeTabs() {
+        if (typeof chrome.tabs !== 'object') {
+            console.log('chrome.tabs not supported!');
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Checks if the browsers support google chrome notifications API.
      *
      * @returns {boolean}
@@ -40,7 +54,7 @@ class Chrome {
      */
     static createBasicNotificationForLesson(lessonId, title, message) {
 
-        if ( ! Chrome.supportsChromeNotifications()) return false;
+        if (!Chrome.supportsChromeNotifications()) return false;
 
         chrome.notifications.create(lessonId, {
             type: "basic",
@@ -55,7 +69,8 @@ class Chrome {
                     title: 'Mark as Watched'
                 }
             ]
-        }, function () {});
+        }, function () {
+        });
 
     }
 
@@ -69,7 +84,7 @@ class Chrome {
      */
     static createListNotificationForLessons(title, message, items) {
 
-        if ( ! Chrome.supportsChromeNotifications()) return false;
+        if (!Chrome.supportsChromeNotifications()) return false;
 
         chrome.notifications.create('list', {
             type: "list",
@@ -79,13 +94,14 @@ class Chrome {
             iconUrl: "graphics/laranotti-notification-160.png",
             buttons: [
                 {
-                    title: 'Mark all Watched'
+                    title: 'Mark Watched'
                 },
                 {
                     title: 'View on Laracasts'
                 }
             ]
-        }, function () {});
+        }, function () {
+        });
 
     }
 
@@ -97,9 +113,9 @@ class Chrome {
      */
     static changeBadgeValue(value) {
 
-        if ( ! Chrome.supportsChromeBrowserAction()) return false;
+        if (!Chrome.supportsChromeBrowserAction()) return false;
 
-        if(value == 0) value = '';
+        if (value == 0) value = '';
 
         chrome.browserAction.setBadgeText({text: value});
     }

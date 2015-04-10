@@ -2,6 +2,11 @@ import $ from 'jquery';
 
 class Storage {
 
+    /**
+     * It gets lessons from localStorage.
+     *
+     * @returns {*}
+     */
     static getLessons() {
         var lessons = localStorage['lessons'];
 
@@ -12,6 +17,11 @@ class Storage {
         return lessons;
     }
 
+    /**
+     * It stores lessons in localScope.
+     *
+     * @param lessons
+     */
     static storeLessons(lessons) {
         localStorage['lessons'] = JSON.stringify(lessons);
     }

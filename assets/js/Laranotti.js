@@ -106,6 +106,16 @@ class Laranotti {
 
     }
 
+    /**
+     * Prepares new lessons with correct attributes,
+     * checks if the new lessons are already in the current lessons.
+     * If the new lesson is not in the current lessons then it
+     * adds that new lessons to the beginning of current lessons.
+     *  - It sorts the lessons by date once all are added and stores them in storage.
+     *
+     * @param data
+     * @returns {*}
+     */
     addNewLessons(data) {
         var feed = Laranotti.prepareLessons(data);
 
@@ -129,6 +139,12 @@ class Laranotti {
         return newLessons;
     }
 
+    /**
+     * Uses Ajax to fetch new lessons from my Laracasts feed API.
+     * Updates extension badge.
+     *
+     * @returns {*}
+     */
     checkForNewLessons() {
 
         var deferredObject = $.Deferred();
@@ -159,6 +175,10 @@ class Laranotti {
         return deferredObject.promise();
     }
 
+    /**
+     * It updates extension badge with the number of
+     * unwatched lessons.
+     */
     updateBadge() {
         var numberOfUnwatchedLessons = this.lessons.filter(lesson => {
             return lesson.watched == false;
@@ -167,6 +187,9 @@ class Laranotti {
         Chrome.changeBadgeValue(numberOfUnwatchedLessons.toString());
     }
 
+    /**
+     * It marks all lessons watched.
+     */
     markAllLessonsWatched() {
         this.lessons.forEach(lesson => {
             lesson.watched = true;
@@ -178,6 +201,10 @@ class Laranotti {
         this.updateBadge();
     }
 
+    /**
+     * It marks only the new lessons as watched and sets
+     * the new property to false.
+     */
     markNewLessonsWatched() {
         this.lessons.forEach(lesson => {
             if(lesson.new == true) {
@@ -191,6 +218,11 @@ class Laranotti {
         this.updateBadge();
     }
 
+    /**
+     * It toggles a lesson watched or unwatched.
+     *
+     * @param key
+     */
     toggleLessonWatched(key) {
         this.lessons[key].watched = this.lessons[key].watched == false;
 
@@ -199,6 +231,11 @@ class Laranotti {
         this.updateBadge();
     }
 
+    /**
+     * It removes a lesson from lessons property by key.
+     *
+     * @param key
+     */
     removeLesson(key) {
         this.lessons.splice(key, 1);
 
@@ -207,6 +244,9 @@ class Laranotti {
         this.updateBadge();
     }
 
+    /**
+     * It stores lessons in storage. (LocalStorage)
+     */
     storeLessonsInStorage() {
         Storage.storeLessons(this.lessons);
     }

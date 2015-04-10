@@ -56,6 +56,22 @@ var Chrome = (function () {
             return true;
         }
     }, {
+        key: 'supportsChromeTabs',
+
+        /**
+         * Checks if the browser supports google chrome tabs API.
+         *
+         * @returns {boolean}
+         */
+        value: function supportsChromeTabs() {
+            if (typeof chrome.tabs !== 'object') {
+                console.log('chrome.tabs not supported!');
+                return false;
+            }
+
+            return true;
+        }
+    }, {
         key: 'supportsChromeBrowserAction',
 
         /**
@@ -120,7 +136,7 @@ var Chrome = (function () {
                 items: items,
                 iconUrl: 'graphics/laranotti-notification-160.png',
                 buttons: [{
-                    title: 'Mark all Watched'
+                    title: 'Mark Watched'
                 }, {
                     title: 'View on Laracasts'
                 }]
@@ -255,6 +271,17 @@ var Laranotti = (function () {
         }
     }, {
         key: 'addNewLessons',
+
+        /**
+         * Prepares new lessons with correct attributes,
+         * checks if the new lessons are already in the current lessons.
+         * If the new lesson is not in the current lessons then it
+         * adds that new lessons to the beginning of current lessons.
+         *  - It sorts the lessons by date once all are added and stores them in storage.
+         *
+         * @param data
+         * @returns {*}
+         */
         value: function addNewLessons(data) {
             var _this = this;
 
@@ -281,6 +308,13 @@ var Laranotti = (function () {
         }
     }, {
         key: 'checkForNewLessons',
+
+        /**
+         * Uses Ajax to fetch new lessons from my Laracasts feed API.
+         * Updates extension badge.
+         *
+         * @returns {*}
+         */
         value: function checkForNewLessons() {
             var _this2 = this;
 
@@ -311,6 +345,11 @@ var Laranotti = (function () {
         }
     }, {
         key: 'updateBadge',
+
+        /**
+         * It updates extension badge with the number of
+         * unwatched lessons.
+         */
         value: function updateBadge() {
             var numberOfUnwatchedLessons = this.lessons.filter(function (lesson) {
                 return lesson.watched == false;
@@ -320,6 +359,10 @@ var Laranotti = (function () {
         }
     }, {
         key: 'markAllLessonsWatched',
+
+        /**
+         * It marks all lessons watched.
+         */
         value: function markAllLessonsWatched() {
             this.lessons.forEach(function (lesson) {
                 lesson.watched = true;
@@ -332,6 +375,11 @@ var Laranotti = (function () {
         }
     }, {
         key: 'markNewLessonsWatched',
+
+        /**
+         * It marks only the new lessons as watched and sets
+         * the new property to false.
+         */
         value: function markNewLessonsWatched() {
             this.lessons.forEach(function (lesson) {
                 if (lesson['new'] == true) {
@@ -346,6 +394,12 @@ var Laranotti = (function () {
         }
     }, {
         key: 'toggleLessonWatched',
+
+        /**
+         * It toggles a lesson watched or unwatched.
+         *
+         * @param key
+         */
         value: function toggleLessonWatched(key) {
             this.lessons[key].watched = this.lessons[key].watched == false;
 
@@ -355,6 +409,12 @@ var Laranotti = (function () {
         }
     }, {
         key: 'removeLesson',
+
+        /**
+         * It removes a lesson from lessons property by key.
+         *
+         * @param key
+         */
         value: function removeLesson(key) {
             this.lessons.splice(key, 1);
 
@@ -364,6 +424,10 @@ var Laranotti = (function () {
         }
     }, {
         key: 'storeLessonsInStorage',
+
+        /**
+         * It stores lessons in storage. (LocalStorage)
+         */
         value: function storeLessonsInStorage() {
             _Storage2['default'].storeLessons(this.lessons);
         }
@@ -428,6 +492,12 @@ var Storage = (function () {
 
     _createClass(Storage, null, [{
         key: 'getLessons',
+
+        /**
+         * It gets lessons from localStorage.
+         *
+         * @returns {*}
+         */
         value: function getLessons() {
             var lessons = localStorage.lessons;
 
@@ -439,6 +509,12 @@ var Storage = (function () {
         }
     }, {
         key: 'storeLessons',
+
+        /**
+         * It stores lessons in localScope.
+         *
+         * @param lessons
+         */
         value: function storeLessons(lessons) {
             localStorage.lessons = JSON.stringify(lessons);
         }
@@ -481,8 +557,8 @@ var Lesson = (function (_React$Component) {
     _inherits(Lesson, _React$Component);
 
     _createClass(Lesson, [{
-        key: "watchLesson",
-        value: function watchLesson(e) {
+        key: "_watchLesson",
+        value: function _watchLesson(e) {
             e.preventDefault();
 
             this.props.watchLesson();
@@ -529,7 +605,7 @@ var Lesson = (function (_React$Component) {
                     _React2["default"].createElement("i", { onClick: this.props.toggleWatched, className: this.props.watched ? "fa fa-fw fa-check-square-o" : "fa fa-fw fa-square-o" }),
                     _React2["default"].createElement(
                         "a",
-                        { onClick: this.watchLesson.bind(this), target: "_blank", href: this.props.href },
+                        { onClick: this._watchLesson.bind(this), target: "_blank", href: this.props.href },
                         this.props.heading
                     )
                 ),
@@ -792,6 +868,10 @@ var _Lessons = require('./Lessons.js');
 
 var _Lessons2 = _interopRequireWildcard(_Lessons);
 
+var _Chrome = require('../Chrome.js');
+
+var _Chrome2 = _interopRequireWildcard(_Chrome);
+
 var Notifier = (function (_React$Component) {
     function Notifier() {
         _classCallCheck(this, Notifier);
@@ -807,6 +887,10 @@ var Notifier = (function (_React$Component) {
 
     _createClass(Notifier, [{
         key: 'componentDidMount',
+
+        /**
+         * Run once the components is mounted.
+         */
         value: function componentDidMount() {
             var lessons = this.props.laranotti.lessons;
 
@@ -823,7 +907,7 @@ var Notifier = (function (_React$Component) {
 
         /**
          * Add listeners to this method.
-         * When the component mounts the listeners
+         * When the component mounts, the listeners
          * are attached.
          */
         value: function attachListeners() {
@@ -837,6 +921,11 @@ var Notifier = (function (_React$Component) {
         }
     }, {
         key: 'fetchLessonsFromStorage',
+
+        /**
+         * Triggers Laranotti to fetch lessons from Storage
+         * and then updates state lessons to lessons fetched.
+         */
         value: function fetchLessonsFromStorage() {
             this.props.laranotti.getLessonsFromStorage();
 
@@ -844,6 +933,13 @@ var Notifier = (function (_React$Component) {
         }
     }, {
         key: '_refreshFeed',
+
+        /**
+         * Triggers Laranotti to check for new lessons on Laracasts.
+         * Once done, it updates the state lessons.
+         *
+         * @private
+         */
         value: function _refreshFeed() {
             var _this2 = this;
 
@@ -853,6 +949,13 @@ var Notifier = (function (_React$Component) {
         }
     }, {
         key: '_markAllWatched',
+
+        /**
+         * Marks all lessons watched on Laranotti
+         * and updates state.
+         *
+         * @private
+         */
         value: function _markAllWatched() {
             this.props.laranotti.markAllLessonsWatched();
 
@@ -860,6 +963,14 @@ var Notifier = (function (_React$Component) {
         }
     }, {
         key: '_toggleWatched',
+
+        /**
+         * Toggles a lesson as watched or unwatched on Laranotti
+         * and update the state lessons.
+         *
+         * @param key
+         * @private
+         */
         value: function _toggleWatched(key) {
             this.props.laranotti.toggleLessonWatched(key);
 
@@ -867,6 +978,14 @@ var Notifier = (function (_React$Component) {
         }
     }, {
         key: '_removeLesson',
+
+        /**
+         * Removes a single lessons from Laranotti lessons
+         * and updates the state lessons.
+         *
+         * @param key
+         * @private
+         */
         value: function _removeLesson(key) {
             this.props.laranotti.removeLesson(key);
 
@@ -874,21 +993,29 @@ var Notifier = (function (_React$Component) {
         }
     }, {
         key: '_watchLesson',
+
+        /**
+         * If the user clicks on a lesson title then
+         * that lesson is opened in a new tab. Once
+         * that tab closes, it marks that lessons watched.
+         *
+         * @param key
+         * @returns {boolean}
+         * @private
+         */
         value: function _watchLesson(key) {
+            if (!_Chrome2['default'].supportsChromeTabs()) {
+                return false;
+            }chrome.tabs.create({
+                url: this.state.lessons[key].link
+            }, function (tab) {
 
-            if (typeof chrome.tabs === 'object') {
-
-                chrome.tabs.create({
-                    url: this.state.lessons[key].link
-                }, function (tab) {
-
-                    chrome.runtime.sendMessage({
-                        action: 'detectLessonTabClosed',
-                        tabId: tab.id,
-                        lessonId: key
-                    });
+                chrome.runtime.sendMessage({
+                    action: 'detectLessonTabClosed',
+                    tabId: tab.id,
+                    lessonId: key
                 });
-            }
+            });
         }
     }, {
         key: 'render',
@@ -920,7 +1047,13 @@ var Notifier = (function (_React$Component) {
 exports['default'] = Notifier;
 module.exports = exports['default'];
 
-},{"./Lessons.js":6,"./Navbar.js":7,"jquery":22,"react":178}],9:[function(require,module,exports){
+/**
+ * Default value is empty array.
+ *
+ * @type {{lessons: Array}}
+ */
+
+},{"../Chrome.js":2,"./Lessons.js":6,"./Navbar.js":7,"jquery":22,"react":178}],9:[function(require,module,exports){
 // This file is autogenerated via the `commonjs` Grunt task. You can require() this file in a CommonJS environment.
 require('../../js/transition.js')
 require('../../js/alert.js')

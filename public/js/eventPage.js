@@ -198,6 +198,22 @@ var Chrome = (function () {
             return true;
         }
     }, {
+        key: 'supportsChromeTabs',
+
+        /**
+         * Checks if the browser supports google chrome tabs API.
+         *
+         * @returns {boolean}
+         */
+        value: function supportsChromeTabs() {
+            if (typeof chrome.tabs !== 'object') {
+                console.log('chrome.tabs not supported!');
+                return false;
+            }
+
+            return true;
+        }
+    }, {
         key: 'supportsChromeBrowserAction',
 
         /**
@@ -262,7 +278,7 @@ var Chrome = (function () {
                 items: items,
                 iconUrl: 'graphics/laranotti-notification-160.png',
                 buttons: [{
-                    title: 'Mark all Watched'
+                    title: 'Mark Watched'
                 }, {
                     title: 'View on Laracasts'
                 }]
@@ -397,6 +413,17 @@ var Laranotti = (function () {
         }
     }, {
         key: 'addNewLessons',
+
+        /**
+         * Prepares new lessons with correct attributes,
+         * checks if the new lessons are already in the current lessons.
+         * If the new lesson is not in the current lessons then it
+         * adds that new lessons to the beginning of current lessons.
+         *  - It sorts the lessons by date once all are added and stores them in storage.
+         *
+         * @param data
+         * @returns {*}
+         */
         value: function addNewLessons(data) {
             var _this = this;
 
@@ -423,6 +450,13 @@ var Laranotti = (function () {
         }
     }, {
         key: 'checkForNewLessons',
+
+        /**
+         * Uses Ajax to fetch new lessons from my Laracasts feed API.
+         * Updates extension badge.
+         *
+         * @returns {*}
+         */
         value: function checkForNewLessons() {
             var _this2 = this;
 
@@ -453,6 +487,11 @@ var Laranotti = (function () {
         }
     }, {
         key: 'updateBadge',
+
+        /**
+         * It updates extension badge with the number of
+         * unwatched lessons.
+         */
         value: function updateBadge() {
             var numberOfUnwatchedLessons = this.lessons.filter(function (lesson) {
                 return lesson.watched == false;
@@ -462,6 +501,10 @@ var Laranotti = (function () {
         }
     }, {
         key: 'markAllLessonsWatched',
+
+        /**
+         * It marks all lessons watched.
+         */
         value: function markAllLessonsWatched() {
             this.lessons.forEach(function (lesson) {
                 lesson.watched = true;
@@ -474,6 +517,11 @@ var Laranotti = (function () {
         }
     }, {
         key: 'markNewLessonsWatched',
+
+        /**
+         * It marks only the new lessons as watched and sets
+         * the new property to false.
+         */
         value: function markNewLessonsWatched() {
             this.lessons.forEach(function (lesson) {
                 if (lesson['new'] == true) {
@@ -488,6 +536,12 @@ var Laranotti = (function () {
         }
     }, {
         key: 'toggleLessonWatched',
+
+        /**
+         * It toggles a lesson watched or unwatched.
+         *
+         * @param key
+         */
         value: function toggleLessonWatched(key) {
             this.lessons[key].watched = this.lessons[key].watched == false;
 
@@ -497,6 +551,12 @@ var Laranotti = (function () {
         }
     }, {
         key: 'removeLesson',
+
+        /**
+         * It removes a lesson from lessons property by key.
+         *
+         * @param key
+         */
         value: function removeLesson(key) {
             this.lessons.splice(key, 1);
 
@@ -506,6 +566,10 @@ var Laranotti = (function () {
         }
     }, {
         key: 'storeLessonsInStorage',
+
+        /**
+         * It stores lessons in storage. (LocalStorage)
+         */
         value: function storeLessonsInStorage() {
             _Storage2['default'].storeLessons(this.lessons);
         }
@@ -570,6 +634,12 @@ var Storage = (function () {
 
     _createClass(Storage, null, [{
         key: 'getLessons',
+
+        /**
+         * It gets lessons from localStorage.
+         *
+         * @returns {*}
+         */
         value: function getLessons() {
             var lessons = localStorage.lessons;
 
@@ -581,6 +651,12 @@ var Storage = (function () {
         }
     }, {
         key: 'storeLessons',
+
+        /**
+         * It stores lessons in localScope.
+         *
+         * @param lessons
+         */
         value: function storeLessons(lessons) {
             localStorage.lessons = JSON.stringify(lessons);
         }

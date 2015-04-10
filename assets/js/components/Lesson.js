@@ -2,7 +2,7 @@ import React from 'react';
 
 class Lesson extends React.Component {
 
-    watchLesson(e) {
+    _watchLesson(e) {
         e.preventDefault();
 
         this.props.watchLesson();
@@ -24,7 +24,7 @@ class Lesson extends React.Component {
                 </p>
                 <h4>
                     <i onClick={this.props.toggleWatched} className={this.props.watched ? 'fa fa-fw fa-check-square-o' : 'fa fa-fw fa-square-o'}></i>
-                    <a onClick={this.watchLesson.bind(this)} target="_blank" href={this.props.href}>{this.props.heading}</a>
+                    <a onClick={this._watchLesson.bind(this)} target="_blank" href={this.props.href}>{this.props.heading}</a>
                 </h4>
                 <p>{this.props.text}</p>
                 <br />
