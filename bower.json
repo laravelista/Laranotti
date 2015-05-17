@@ -1,18 +1,4 @@
 {
-  "name": "laracasts-chrome-extension",
-  "version": "2.0.0",
-  "authors": [
-    "Mario Basic <mario.basic@outlook.com>"
-  ],
-  "description": "This extension notifies you of new lessons, series and lets you view the latest.",
-  "keywords": [
-    "laracasts",
-    "notifier",
-    "chrome",
-    "extension"
-  ],
-  "license": "MIT",
-  "private": true,
   "ignore": [
     "**/.*",
     "node_modules",

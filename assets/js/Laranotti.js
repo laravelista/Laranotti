@@ -6,7 +6,9 @@ class Laranotti {
 
     lessons = [];
 
-    url = "http://laracasts-feed.mariobasic.com/api/v1/feed/lessons";
+    url = "http://lissandra.laravelista.com/api/v1/feed/lessons";
+
+    lessonsToKeep = 5;
 
     constructor() {
         this.getLessonsFromStorage();
@@ -134,6 +136,8 @@ class Laranotti {
 
         this.sortLessonsByDate();
 
+        this.cleanOldLessons();
+
         this.storeLessonsInStorage();
 
         return newLessons;
@@ -249,6 +253,30 @@ class Laranotti {
      */
     storeLessonsInStorage() {
         Storage.storeLessons(this.lessons);
+    }
+
+    /**
+     * Because lessons are being stored in localStorage it is best that Laranotti
+     * cleans localStorage from watched lessons older that 1 week but only if
+     * the maximum number of lessons exceeds ~20 lessons.
+     */
+    cleanOldLessons() {
+        if(this.lessons.length > this.lessonsToKeep)
+        {
+            // Get current date
+            var currentDate = new Date();
+            // Subtract 7 days to current date.
+            currentDate.setTime(currentDate.getTime() - 7 * 86400000);
+
+            this.lessons = this.lessons.filter(lesson => {
+                if(lesson.watched === true && (Laranotti.convertToDate(lesson.date) - currentDate) < 0)
+                {
+                    return false;
+                }
+
+                return true;
+            });
+        }
     }
 
 }
