@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Laranotti",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Laranotti notifies you of new lessons from Laracasts, and lets you view the latest.",
   "icons": {
     "16": "graphics/laranotti-logo-16.png",
