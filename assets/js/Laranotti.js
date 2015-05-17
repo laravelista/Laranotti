@@ -8,7 +8,7 @@ class Laranotti {
 
     url = "http://lissandra.laravelista.com/api/v1/feed/lessons";
 
-    lessonsToKeep = 5;
+    lessonsToKeep = 20;
 
     constructor() {
         this.getLessonsFromStorage();

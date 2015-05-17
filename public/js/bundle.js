@@ -198,7 +198,7 @@ var Laranotti = (function () {
 
         this.lessons = [];
         this.url = 'http://lissandra.laravelista.com/api/v1/feed/lessons';
-        this.lessonsToKeep = 5;
+        this.lessonsToKeep = 20;
 
         this.getLessonsFromStorage();
     }
