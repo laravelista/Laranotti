@@ -2,11 +2,13 @@
 
 ![ ](http://img.shields.io/gratipay/mabasic.svg) [![Join the chat at https://gitter.im/laravelista/Laranotti](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/laravelista/Laranotti?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-Install from [Google Chrome store page](https://chrome.google.com/webstore/detail/laracasts-notifier/aidlbngabkfmnfmfjgnmfhihjcpdbbjo)
+**Discontinued**
 
-I have opened a topic on [Laracasts forum](https://laracasts.com/discuss/channels/general-discussion/laracasts-notifier-extension-for-google-chrome) for discussions.
+~~Install from [Google Chrome store page](https://chrome.google.com/webstore/detail/laracasts-notifier/aidlbngabkfmnfmfjgnmfhihjcpdbbjo)~~
 
-If you are going to tweet about it please use `#Laranotti` and help me spread the news, thank you.
+~~I have opened a topic on [Laracasts forum](https://laracasts.com/discuss/channels/general-discussion/laracasts-notifier-extension-for-google-chrome) for discussions.~~
+
+~~If you are going to tweet about it please use `#Laranotti` and help me spread the news, thank you.~~
 
 ## Description
 
